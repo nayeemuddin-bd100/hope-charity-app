@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { Barlow_Condensed, Inter } from "next/font/google";
+import { Barlow_Condensed } from "next/font/google";
+import Navbar from "./components/navbar/Navbar";
 import "./globals.css";
-
-export const inter = Inter({ subsets: ["latin"] });
 
 const barlowCondensed = Barlow_Condensed({
   subsets: ["latin"],
@@ -21,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={barlowCondensed.className}>{children}</body>
+      <body className={barlowCondensed.className}>
+        <Navbar />
+        {children}
+      </body>
     </html>
   );
 }
