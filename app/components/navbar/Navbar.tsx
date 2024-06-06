@@ -25,7 +25,7 @@ const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
   return (
-    <nav className="fixed w-full h-[90px] bg-white shadow-md z-10 top-0">
+    <nav className="fixed w-full h-[90px] bg-white shadow-md z-50 top-0">
       <Container>
         <div className="flex items-center justify-between py-3">
           {/* Left Side */}
