@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/sheet";
 import { usePathname, useRouter } from "next/navigation";
 import { HiOutlineMenu } from "react-icons/hi";
-import Container from "../ui/Container";
-import Logo from "../ui/Logo";
+import Container from "../shared/Container";
+import Logo from "../shared/Logo";
 import MenuItem from "./MenuItem";
 
 const menuItems = [
