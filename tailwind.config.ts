@@ -18,9 +18,16 @@ const config = {
       },
     },
     extend: {
+      colors: {
+        primary: "#061738",
+      },
       backgroundImage: {
         "btn-gradient": "linear-gradient(to right, #22c55e, #f59e0b)",
         "btn-gradient-hover": "linear-gradient(to left, #22c55e, #f59e0b)",
+      },
+
+      screens: {
+        xs: "480px",
       },
 
       fontFamily: {
