@@ -1,4 +1,5 @@
 import AboutArea from "./components/home/AboutArea";
+import FeaturesArea from "./components/home/FeaturesArea";
 import HeroSection from "./components/home/HeroSection";
 
 export default function Home() {
@@ -7,6 +8,7 @@ export default function Home() {
     <div>
       <HeroSection />
       <AboutArea />
+      <FeaturesArea />
     </div>
   );
 }
