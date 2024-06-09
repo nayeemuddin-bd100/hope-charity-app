@@ -20,6 +20,7 @@ const config = {
     extend: {
       colors: {
         primary: "#061738",
+        gradient: "linear-gradient(to left, #22c55e, #f59e0b)",
       },
       backgroundImage: {
         "btn-gradient": "linear-gradient(to right, #22c55e, #f59e0b)",
