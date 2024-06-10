@@ -1,13 +1,20 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-const Logo = () => {
+type LogoProps = {
+  className?: string;
+};
+const Logo = ({ className }: LogoProps) => {
   const router = useRouter();
   return (
     <div
-      className="inline-flex text-[40px] font-bold text-gray-800 cursor-pointer uppercase"
+      className={cn(
+        "inline-flex text-[40px] font-bold text-gray-800 cursor-pointer uppercase",
+        className
+      )}
       onClick={() => router.push("/")}
     >
       <Image
