@@ -1,5 +1,6 @@
 import AboutArea from "./components/home/AboutArea";
 import Causes from "./components/home/Causes";
+import Cta from "./components/home/Cta";
 import Events from "./components/home/Events";
 import FeaturesArea from "./components/home/FeaturesArea";
 import HeroSection from "./components/home/HeroSection";
@@ -13,8 +14,9 @@ export default function Home() {
       <AboutArea />
       <FeaturesArea />
       <Causes />
-      <Volunteer />
+      <Cta />
       <Events />
+      <Volunteer />
     </div>
   );
 }
