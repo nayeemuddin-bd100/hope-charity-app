@@ -1,35 +1,44 @@
 import Container from "../shared/Container";
+import Heading from "../shared/Heading";
+import VolunteerCard from "./VolunteerCard";
 
 const Volunteer = () => {
   return (
-    <div className="py-10 md:py-28 bg-primary bg-[url('/images/volunteer-bg.jpg')] bg-cover bg-center bg-no-repeat">
+    <div className="py-10">
       <Container>
-        <div className="flex flex-col md:flex-row justify-center items-center ">
-          <div className="w-full md:w-1/2">
-            <h2 className="text-3xl lg:text-4xl text-center  font-semibold text-white">
-              If You Want To Join With Us As a Volunteer. Contact Us Today!
-            </h2>
-          </div>
+        <div className="flex flex-col  justify-center items-center mb-10 z-20">
+          <Heading label="VOLUNTEER" gradient />
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-gray-800 text-center capitalize">
+            Our Great Volunteer
+          </h2>
+          <p className="text-sm w-full sm:w-3/4 lg:w-2/5 lg:text-lg font-inter text-center mt-3 text-gray-600">
+            Volunteers empower communities through their dedication and support.
+            Your efforts create meaningful change.
+          </p>
+        </div>
 
-          <div className="flex flex-row md:flex-row justify-evenly items-center w-full md:w-1/2">
-            <div className="flex flex-col justify-center items-center">
-              <h2 className="text-xl md:text-2xl lg:text-4xl  text-white">
-                Call Now
-              </h2>
-              <h2 className="text-xl md:text-2xl lg:text-4xl  text-yellow-500">
-                990 124 675
-              </h2>
-            </div>
-
-            <div className="flex flex-col justify-center items-center">
-              <h2 className="text-xl md:text-2xl lg:text-4xl  text-white">
-                Email Us!
-              </h2>
-              <h2 className="text-xl md:text-2xl lg:text-4xl  text-green-500">
-                support@hope.com
-              </h2>
-            </div>
-          </div>
+        <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-2">
+          {/* Volunteer Card */}
+          <VolunteerCard
+            img="/images/volunteer/demo-1.webp"
+            name="Maria Belziana"
+            title="Team Lead"
+          />
+          <VolunteerCard
+            img="/images/volunteer/demo-2.jpeg"
+            name="Samuel Smith"
+            title="Volunteer"
+          />{" "}
+          <VolunteerCard
+            img="/images/volunteer/author-1.jpg"
+            name="Kyle Smith"
+            title="Volunteer"
+          />{" "}
+          <VolunteerCard
+            img="/images/volunteer/author-2.jpg"
+            name="Will sentence"
+            title="Volunteer"
+          />
         </div>
       </Container>
     </div>

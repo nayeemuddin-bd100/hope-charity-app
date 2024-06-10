@@ -8,7 +8,7 @@ interface EventCardProps {
 }
 const EventCard = ({ img, title, desc }: EventCardProps) => {
   return (
-    <div className="flex flex-col md:flex-row justify-center items-center h-full   gap-3 p-5 sm:mx-5 md:mx-10 lg:mx-20 hover:bg-gradient-to-tr hover:from-yellow-500 hover:to-green-600 transition duration-700 ease-in-out  hover:rounded hover:shadow-2xl shadow-lime-300 group z-20 bg-white">
+    <div className="flex flex-col md:flex-row justify-center items-center h-full   gap-3 p-5 sm:mx-5 md:mx-10 lg:mx-20 hover:bg-gradient-to-tr hover:from-yellow-500 hover:to-green-600 hover:-translate-y-3.5 hover:shadow-2xl hover:shadow-slate-500 transition duration-300 ease-in-out shadow-lime-300 group z-20 bg-white">
       <div className="relative w-full md:w-4/12 h-full cursor-pointer">
         <Image
           src={img}
