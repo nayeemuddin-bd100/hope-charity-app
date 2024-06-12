@@ -17,8 +17,9 @@ const menuItems = [
   { name: "About", path: "/about", current: false },
   { name: "Cause", path: "/cause", current: false },
   { name: "Event", path: "/event", current: false },
-  { name: "Blog", path: "/blog", current: false },
+  // { name: "Blog", path: "/blog", current: false },
   { name: "Contact", path: "/contact", current: false },
+  { name: "Login", path: "/login", current: false },
 ];
 
 const Navbar = () => {
