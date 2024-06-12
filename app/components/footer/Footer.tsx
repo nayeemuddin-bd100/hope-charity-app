@@ -41,7 +41,7 @@ const Footer = () => {
 
           {/* 2nd col */}
 
-          <div className="flex justify-center items-center">
+          <div className="flex md:justify-center items-center">
             <div className="flex flex-col justify-start items-start gap-3 ">
               <h2 className="text-xl font-bold ">Useful Link</h2>
               <Link
