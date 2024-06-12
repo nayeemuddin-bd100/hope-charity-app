@@ -1,13 +1,15 @@
 import Image from "next/image";
+import ProgressBar from "./ProgressBar";
 
 type CauseCardProps = {
   image: string;
   title: string;
   desc: string;
-  goal: string;
-  raise: string;
+  goal: number;
+  raise: number;
 };
 const CauseCard = ({ image, title, desc, goal, raise }: CauseCardProps) => {
+  const percentage = (raise / goal) * 100;
   return (
     <div className="flex flex-col justify-center items-center group border border-x-green-500 border-y-yellow-500 py-4">
       <div className="relative w-[200px] h-[200px]  md:w-[300px] md:h-[300px] overflow-hidden  rounded-full border-2 border-green-200 transition duration-300 ease-in-out ">
@@ -18,7 +20,14 @@ const CauseCard = ({ image, title, desc, goal, raise }: CauseCardProps) => {
           height={300}
           className="object-cover w-full h-full rounded-full group-hover:scale-105 transition duration-300 ease-in-out"
         />
+        <div className="absolute inset-0 bg-primary bg-opacity-0 group-hover:bg-opacity-70 transition duration-300 ease-in-out rounded-full flex justify-center items-center">
+          <button className="bg-btn-gradient text-white px-3 py-2 rounded hover:bg-btn-gradient-hover transition duration-300 ease-in-out opacity-0 group-hover:opacity-100">
+            Donate Now
+          </button>
+        </div>
       </div>
+
+      <ProgressBar percentage={percentage} />
 
       <div className="flex flex-col xs:flex-row justify-center gap-y-3 gap-x-8 w-full items-center mt-4">
         <button className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 transition duration-300 ease-in-out ">
