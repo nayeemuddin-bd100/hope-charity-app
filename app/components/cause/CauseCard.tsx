@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import ProgressBar from "./ProgressBar";
 
 type CauseCardProps = {
@@ -21,9 +22,12 @@ const CauseCard = ({ image, title, desc, goal, raise }: CauseCardProps) => {
           className="object-cover w-full h-full rounded-full group-hover:scale-105 transition duration-300 ease-in-out"
         />
         <div className="absolute inset-0 bg-primary bg-opacity-0 group-hover:bg-opacity-70 transition duration-300 ease-in-out rounded-full flex justify-center items-center">
-          <button className="bg-btn-gradient text-white px-3 py-2 rounded hover:bg-btn-gradient-hover transition duration-300 ease-in-out opacity-0 group-hover:opacity-100">
+          <Link
+            href="/donate"
+            className="bg-btn-gradient text-white px-3 py-2 rounded hover:bg-btn-gradient-hover transition duration-300 ease-in-out opacity-0 group-hover:opacity-100"
+          >
             Donate Now
-          </button>
+          </Link>
         </div>
       </div>
 
