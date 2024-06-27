@@ -9,7 +9,11 @@ type VolunteerCardProps = {
 const VolunteerCard = ({ img, name, title }: VolunteerCardProps) => {
   return (
     <div className="flex flex-col justify-center items-center mx-auto group">
-      <div className="w-[200px] h-[200px]  rounded-xl relative">
+      <div
+        data-aos="zoom-in"
+        data-aos-duration="1000"
+        className="w-[200px] h-[200px]  rounded-xl relative"
+      >
         <Image
           src={img}
           alt="volunteer"

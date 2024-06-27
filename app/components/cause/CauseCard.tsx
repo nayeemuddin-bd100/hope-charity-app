@@ -13,7 +13,11 @@ const CauseCard = ({ image, title, desc, goal, raise }: CauseCardProps) => {
   const percentage = (raise / goal) * 100;
   return (
     <div className="flex flex-col justify-center items-center group border border-x-green-500 border-y-yellow-500 py-4">
-      <div className="relative w-[200px] h-[200px]  md:w-[300px] md:h-[300px] overflow-hidden  rounded-full border-2 border-green-200 transition duration-300 ease-in-out ">
+      <div
+        data-aos="zoom-in"
+        data-aos-duration="1000"
+        className="relative w-[200px] h-[200px]  md:w-[300px] md:h-[300px] overflow-hidden  rounded-full border-2 border-green-200 transition duration-300 ease-in-out "
+      >
         <Image
           src={image}
           alt={image}

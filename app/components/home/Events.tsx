@@ -24,21 +24,28 @@ const Events = () => {
           {/* Events */}
 
           <div className="flex flex-col justify-center items-center md:px-10 mt-10 gap-8 ">
-            <EventCard
-              img="/images/events/event-1.jpg"
-              title="Fundraising event that could change some poor children."
-              desc="lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
-            />{" "}
-            <EventCard
-              img="/images/events/event-2.jpg"
-              title="Many Children are suffering a lot for food."
-              desc="lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
-            />{" "}
-            <EventCard
-              img="/images/events/event-3.jpg"
-              title="Be kind for the poor people and the kids."
-              desc="lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
-            />
+            <div data-aos="fade-up" data-aos-duration="1000">
+              <EventCard
+                img="/images/events/event-1.jpg"
+                title="Fundraising event that could change some poor children."
+                desc="lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
+              />
+            </div>
+
+            <div data-aos="fade-up" data-aos-duration="1000">
+              <EventCard
+                img="/images/events/event-2.jpg"
+                title="Many Children are suffering a lot for food."
+                desc="lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
+              />
+            </div>
+            <div data-aos="fade-up" data-aos-duration="1000">
+              <EventCard
+                img="/images/events/event-3.jpg"
+                title="Be kind for the poor people and the kids."
+                desc="lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
+              />
+            </div>
           </div>
 
           {/* Left Icon */}

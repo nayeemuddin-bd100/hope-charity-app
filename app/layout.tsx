@@ -1,3 +1,4 @@
+import { AOSInit } from "@/provider/AOSProvider";
 import type { Metadata } from "next";
 import { Barlow_Condensed } from "next/font/google";
 import Footer from "./components/footer/Footer";
@@ -21,6 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <AOSInit />
       <body className={barlowCondensed.className}>
         <Navbar />
         {children}
