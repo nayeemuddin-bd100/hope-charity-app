@@ -23,7 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AOSInit />
-      <body className={barlowCondensed.className}>
+      <body
+        className={`${barlowCondensed.className} w-full h-full m-0 p-0 overflow-x-hidden`}
+      >
         <Navbar />
         {children}
         <Footer />

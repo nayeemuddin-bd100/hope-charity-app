@@ -18,7 +18,7 @@ const AboutArea = () => {
               <Image
                 alt="About Us Image"
                 src={"/images/about-us.jpg"}
-                className=" w-[80%] lg:w-full h-full object-cover rounded-full mx-auto border-8 shadow-none border-stone-300"
+                className=" w-[80%] sm:w-[60%] lg:w-full h-full object-cover rounded-full mx-auto border-8 shadow-none border-stone-300"
                 width="470"
                 height="470"
               />

@@ -13,7 +13,7 @@ const HeroSection = () => {
             data-aos-duration="1000"
             className="text-3xl md:text-7xl lg:text-[100px] font-semibold capitalize leading-none mt-3"
           >
-            They are wait for some food.
+            They are waiting for some food.
           </h2>
           <p
             data-aos="fade-up"
