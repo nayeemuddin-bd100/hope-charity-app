@@ -4,6 +4,7 @@ import { Barlow_Condensed } from "next/font/google";
 import Footer from "./components/footer/Footer";
 import Navbar from "./components/navbar/Navbar";
 import "./globals.css";
+import ToastProvider from "./providers/ToastProvider";
 
 const barlowCondensed = Barlow_Condensed({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body
         className={`${barlowCondensed.className} w-full h-full m-0 p-0 overflow-x-hidden`}
       >
+        <ToastProvider />
         <Navbar />
         {children}
         <Footer />
