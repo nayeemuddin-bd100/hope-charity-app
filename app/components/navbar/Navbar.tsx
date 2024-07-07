@@ -6,7 +6,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { HiOutlineMenu } from "react-icons/hi";
 import Container from "../shared/Container";
 import Logo from "../shared/Logo";
@@ -23,7 +23,6 @@ const menuItems = [
 ];
 
 const Navbar = () => {
-  const router = useRouter();
   const pathname = usePathname();
   return (
     <nav className="fixed w-full h-[90px] bg-white shadow-md z-50 top-0">
@@ -40,7 +39,7 @@ const Navbar = () => {
               {menuItems.map((item) => (
                 <MenuItem
                   key={item.name}
-                  onClick={() => router.push(`${item.path}`)}
+                  path={item.path}
                   label={item.name}
                   active={pathname === item.path}
                 />
@@ -65,7 +64,7 @@ const Navbar = () => {
                   <SheetClose asChild key={item.name}>
                     <MenuItem
                       key={item.name}
-                      onClick={() => router.push(`${item.path}`)}
+                      path={item.path}
                       label={item.name}
                       active={pathname === item.path}
                     />
