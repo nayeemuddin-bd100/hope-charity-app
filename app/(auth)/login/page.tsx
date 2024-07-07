@@ -1,26 +1,44 @@
 "use client";
 import Container from "@/app/components/shared/Container";
+import loginUser from "@/app/services/actions/loginUser";
+import { storeToken } from "@/app/services/auth.service";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+
 interface FormData {
   email: string;
   password: string;
 }
 const Login = () => {
-  const [formData, setFormData] = useState<FormData>({
-    email: "",
-    password: "",
-  });
+  const router = useRouter();
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(formData);
+  const onSubmit: SubmitHandler<FormData> = async (payload) => {
+    const userData = {
+      email: payload.email,
+      password: payload.password,
+    };
+
+    try {
+      const data = await loginUser(userData);
+      console.log("🚀  ~ data:", data.data.accessToken);
+
+      if (data.data?.accessToken) {
+        storeToken(data.data?.accessToken);
+        toast.success("Login successfully");
+      }
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+      toast.error("Login failed");
+    }
   };
 
   return (
@@ -34,7 +52,7 @@ const Login = () => {
             Login to your account
           </p>
 
-          <form onSubmit={handleSubmit} className="mt-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
             <div className="mb-4">
               <label
                 htmlFor="email"
@@ -43,14 +61,20 @@ const Login = () => {
                 Email
               </label>
               <input
+                {...register("email", {
+                  required: "Email name is required",
+                })}
                 type="text"
                 id="email"
                 name="email"
-                value={formData.email}
-                onChange={handleChange}
                 className=" border rounded border-gray-200 w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
                 placeholder="Enter your email"
               />
+              {errors.email && (
+                <p className="text-red-500 text-xs italic">
+                  {errors.email?.message}
+                </p>
+              )}
             </div>
 
             <div className="mb-4">
@@ -61,14 +85,20 @@ const Login = () => {
                 Password
               </label>
               <input
-                type="text"
+                {...register("password", {
+                  required: "Password is required",
+                })}
+                type="password"
                 id="password"
                 name="password"
-                value={formData.password}
-                onChange={handleChange}
                 className=" border rounded border-gray-200 w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
                 placeholder="Enter your password"
               />
+              {errors.password && (
+                <p className="text-red-500 text-xs italic">
+                  {errors.password?.message}
+                </p>
+              )}
             </div>
 
             <Link
@@ -84,16 +114,15 @@ const Login = () => {
             >
               Login
             </button>
-
-            <Link href={"/register"} className="">
-              <p className="text-center my-4  w-full py-3 text-gray-500 text-lg">
-                Don&apos;t have an account?{" "}
-                <span className="inline-block text-blue-500 hover:text-blue-600 hover:underline">
-                  Create account
-                </span>
-              </p>
-            </Link>
           </form>
+          <Link href={"/register"} className="">
+            <p className="text-center my-4  w-full py-3 text-gray-500 text-lg">
+              Don&apos;t have an account?{" "}
+              <span className="inline-block text-blue-500 hover:text-blue-600 hover:underline">
+                Create account
+              </span>
+            </p>
+          </Link>
         </div>
       </Container>
     </div>
