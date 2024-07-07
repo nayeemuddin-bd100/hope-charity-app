@@ -22,6 +22,7 @@ const Login = () => {
     e.preventDefault();
     console.log(formData);
   };
+
   return (
     <div className="py-32  lg:px-10  min-h-[calc(100vh-90px)]">
       <Container>
@@ -47,7 +48,7 @@ const Login = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className=" border rounded border-gray-200 w-full sm:w-4/5 lg:w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
+                className=" border rounded border-gray-200 w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
                 placeholder="Enter your email"
               />
             </div>
@@ -65,7 +66,7 @@ const Login = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className=" border rounded border-gray-200 w-full sm:w-4/5 lg:w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
+                className=" border rounded border-gray-200 w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
                 placeholder="Enter your password"
               />
             </div>
@@ -74,9 +75,7 @@ const Login = () => {
               href={"/forgot-password"}
               className="text-right hover:underline hover:text-green-700  text-lg text-blue-500"
             >
-              <p className="text-right my-4  w-full sm:w-4/5 lg:w-full">
-                Forgot password?
-              </p>
+              <p className="text-right my-4  w-full">Forgot password?</p>
             </Link>
 
             <button
@@ -87,7 +86,7 @@ const Login = () => {
             </button>
 
             <Link href={"/register"} className="">
-              <p className="text-center my-4  w-full sm:w-4/5 lg:w-full py-3 text-gray-500 text-lg">
+              <p className="text-center my-4  w-full py-3 text-gray-500 text-lg">
                 Don&apos;t have an account?{" "}
                 <span className="inline-block text-blue-500 hover:text-blue-600 hover:underline">
                   Create account

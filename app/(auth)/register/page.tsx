@@ -1,35 +1,70 @@
 "use client";
 import Container from "@/app/components/shared/Container";
+import registerUser from "@/app/services/actions/registerUser";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+
+interface IName {
+  firstName: string;
+  lastName: string;
+}
 interface FormData {
-  name: string;
+  name: IName;
   email: string;
+  address: string;
+  contactNo: string;
   password: string;
   confirmPassword: string;
+  userType: "donor" | "volunteer";
 }
+
 const Register = () => {
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+  const router = useRouter();
+  const [userType, setUserType] = useState<"donor" | "volunteer">("donor");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    defaultValues: {
+      userType: "donor",
+    },
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const onSubmit: SubmitHandler<FormData> = async (payload) => {
+    const userData = {
+      name: {
+        firstName: payload.name.firstName,
+        lastName: payload.name.lastName,
+      },
+      email: payload.email,
+      address: payload.address,
+      contactNo: payload.contactNo,
+      password: payload.password,
+      role: payload.userType,
+    };
+
+    try {
+      const data = await registerUser(userData);
+      console.log("🚀 ~ constonSubmit:SubmitHandler<FormData>= ~ data:", data);
+
+      if (data.data?._id) {
+        toast.success("Account created successfully");
+      }
+      router.push("/login");
+    } catch (error) {
+      console.log(error);
+      toast.error("Account register failed");
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(formData);
-  };
   return (
-    <div className="py-32  lg:px-10  min-h-[calc(100vh-90px)]">
+    <div className="py-32 lg:px-10 min-h-[calc(100vh-90px)]">
       <Container>
-        <div className="w-full sm:w-2/3 lg:2/4 2xl:w-3/5  mx-auto border py-10 px-5 sm:px-12 md:px-20 lg:px-32">
+        <div className="w-full sm:w-2/3 xl:w-4/6 2xl:w-3/5 mx-auto border py-10 px-5 sm:px-12 md:px-20 lg:px-32">
           <h2 className="text-3xl lg:text-4xl text-gray-800 text-center">
             Register
           </h2>
@@ -37,23 +72,50 @@ const Register = () => {
             Register your account
           </p>
 
-          <form onSubmit={handleSubmit} className="mt-5">
+          <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
             <div className="mb-4">
               <label
-                htmlFor="email"
+                htmlFor="firstName"
                 className="block text-gray-700 text-lg mb-2"
               >
-                Name
+                First Name
               </label>
               <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className=" border rounded border-gray-200 w-full sm:w-4/5 lg:w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
-                placeholder="Enter your Name"
+                {...register("name.firstName", {
+                  required: "First name is required",
+                })}
+                type="firstName"
+                id="firstName"
+                className="border rounded border-gray-200 w-full  py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
+                placeholder="Enter your name"
               />
+              {errors.name?.firstName && (
+                <p className="text-red-500 text-xs italic">
+                  {errors.name?.firstName?.message}
+                </p>
+              )}
+            </div>{" "}
+            <div className="mb-4">
+              <label
+                htmlFor="lastName"
+                className="block text-gray-700 text-lg mb-2"
+              >
+                Last Name
+              </label>
+              <input
+                {...register("name.lastName", {
+                  required: "Last name is required",
+                })}
+                type="lastName"
+                id="lastName"
+                className="border rounded border-gray-200 w-full  py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
+                placeholder="Enter your Last name"
+              />
+              {errors.name?.lastName && (
+                <p className="text-red-500 text-xs italic">
+                  {errors.name?.lastName?.message}
+                </p>
+              )}
             </div>
             <div className="mb-4">
               <label
@@ -63,16 +125,68 @@ const Register = () => {
                 Email
               </label>
               <input
-                type="text"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /\S+@\S+\.\S+/,
+                    message: "Invalid email address",
+                  },
+                })}
+                type="email"
                 id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className=" border rounded border-gray-200 w-full sm:w-4/5 lg:w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
+                className="border rounded border-gray-200 w-full  py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
                 placeholder="Enter your email"
               />
+              {errors.email && (
+                <p className="text-red-500 text-xs italic">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
-
+            <div className="mb-4">
+              <label
+                htmlFor="Address"
+                className="block text-gray-700 text-lg mb-2"
+              >
+                Address
+              </label>
+              <input
+                {...register("address", {
+                  required: "Address is required",
+                })}
+                type="Address"
+                id="Address"
+                className="border rounded border-gray-200 w-full  py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
+                placeholder="Enter your Address"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-xs italic">
+                  {errors.address?.message}
+                </p>
+              )}
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="contactNo"
+                className="block text-gray-700 text-lg mb-2"
+              >
+                ContactNo
+              </label>
+              <input
+                {...register("contactNo", {
+                  required: "ContactNo is required",
+                })}
+                type="contactNo"
+                id="contactNo"
+                className="border rounded border-gray-200 w-full  py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
+                placeholder="Enter your contactNo"
+              />
+              {errors.contactNo && (
+                <p className="text-red-500 text-xs italic">
+                  {errors.contactNo?.message}
+                </p>
+              )}
+            </div>
             <div className="mb-4">
               <label
                 htmlFor="password"
@@ -81,43 +195,98 @@ const Register = () => {
                 Password
               </label>
               <input
-                type="text"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                })}
+                type="password"
                 id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className=" border rounded border-gray-200 w-full sm:w-4/5 lg:w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
+                className="border rounded border-gray-200 w-full  py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
                 placeholder="Enter your password"
               />
+              {errors.password && (
+                <p className="text-red-500 text-xs italic">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
-
             <div className="mb-4">
               <label
-                htmlFor="password"
+                htmlFor="confirmPassword"
                 className="block text-gray-700 text-lg mb-2"
               >
                 Confirm Password
               </label>
               <input
-                type="text"
+                {...register("confirmPassword", {
+                  required: "Please confirm your password",
+                  validate: (value) =>
+                    value ===
+                      (document.getElementById("password") as HTMLInputElement)
+                        .value || "Passwords do not match",
+                })}
+                type="password"
                 id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className=" border rounded border-gray-200 w-full sm:w-4/5 lg:w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
+                className="border rounded border-gray-200 w-full  py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
                 placeholder="Retype your password"
               />
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-xs italic">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
             </div>
-
+            {/* User Type Selection */}
+            <div className="mb-4">
+              <label className="block text-gray-700 text-lg mb-2">
+                Register as
+              </label>
+              <div className="flex space-x-4">
+                <button
+                  type="button"
+                  className={`flex-1 py-2 px-4 rounded ${
+                    userType === "donor"
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-200 text-gray-700"
+                  }`}
+                  onClick={() => setUserType("donor")}
+                >
+                  Donor
+                </button>
+                <button
+                  type="button"
+                  className={`flex-1 py-2 px-4 rounded ${
+                    userType === "volunteer"
+                      ? "bg-green-500 text-white"
+                      : "bg-gray-200 text-gray-700"
+                  }`}
+                  onClick={() => setUserType("volunteer")}
+                >
+                  Volunteer
+                </button>
+              </div>
+              <input
+                type="hidden"
+                {...register("userType", { required: true })}
+                value={userType}
+              />
+              {errors.userType && (
+                <p className="text-red-500 text-xs italic">
+                  Please select a user type
+                </p>
+              )}
+            </div>
             <button
               type="submit"
               className="bg-green-500 hover:bg-green-700 w-full text-white font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline"
             >
-              Register
+              Register as {userType === "donor" ? "Donor" : "Volunteer"}
             </button>
-
-            <Link href={"/login"} className="">
-              <p className="text-center my-4  w-full sm:w-4/5 lg:w-full py-3 text-gray-500 text-lg">
+            <Link href="/login" className="">
+              <p className="text-center my-4 w-full  py-3 text-gray-500 text-lg">
                 Already have an account?{" "}
                 <span className="inline-block text-blue-500 hover:text-blue-600 hover:underline">
                   Login here
