@@ -49,12 +49,13 @@ const Register = () => {
 
     try {
       const data = await registerUser(userData);
-      console.log("🚀 ~ constonSubmit:SubmitHandler<FormData>= ~ data:", data);
 
-      if (data.data?._id) {
+      if (data?.success && data.data?._id) {
         toast.success("Account created successfully");
+        router.push("/login");
+      } else if (!data?.success && !data.data?._id) {
+        toast.error(data?.message);
       }
-      router.push("/login");
     } catch (error) {
       console.log(error);
       toast.error("Account register failed");

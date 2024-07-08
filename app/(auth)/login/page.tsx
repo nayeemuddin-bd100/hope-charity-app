@@ -1,40 +1,29 @@
 "use client";
+import FormInput from "@/app/components/Form/FormInput";
+import FormWrapper from "@/app/components/Form/FormWrapper";
 import Container from "@/app/components/shared/Container";
 import loginUser from "@/app/services/actions/loginUser";
 import { storeToken } from "@/app/services/auth.service";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues } from "react-hook-form";
 import toast from "react-hot-toast";
 
-interface FormData {
-  email: string;
-  password: string;
-}
 const Login = () => {
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>();
-
-  const onSubmit: SubmitHandler<FormData> = async (payload) => {
-    const userData = {
-      email: payload.email,
-      password: payload.password,
-    };
-
+  const handleLogin = async (payload: FieldValues) => {
     try {
-      const data = await loginUser(userData);
-      console.log("🚀  ~ data:", data.data.accessToken);
-
+      const data = await loginUser(payload);
       if (data.data?.accessToken) {
         storeToken(data.data?.accessToken);
-        toast.success("Login successfully");
+        toast.success("Login successful");
+        router.push("/");
       }
-      router.push("/");
+
+      if (!data.data?.accessToken) {
+        toast.error(data.message);
+      }
     } catch (error) {
       console.log(error);
       toast.error("Login failed");
@@ -48,58 +37,23 @@ const Login = () => {
           <h2 className="text-3xl lg:text-4xl text-gray-800 text-center">
             Login
           </h2>
-          <p className="text-gray-500 mt-3 font-inter text-sm text-center">
+          <p className="text-gray-500 mt-3 font-inter text-sm text-center mb-5">
             Login to your account
           </p>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
-            <div className="mb-4">
-              <label
-                htmlFor="email"
-                className="block text-gray-700 text-lg mb-2"
-              >
-                Email
-              </label>
-              <input
-                {...register("email", {
-                  required: "Email name is required",
-                })}
-                type="text"
-                id="email"
-                name="email"
-                className=" border rounded border-gray-200 w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
-                placeholder="Enter your email"
-              />
-              {errors.email && (
-                <p className="text-red-500 text-xs italic">
-                  {errors.email?.message}
-                </p>
-              )}
-            </div>
-
-            <div className="mb-4">
-              <label
-                htmlFor="password"
-                className="block text-gray-700 text-lg mb-2"
-              >
-                Password
-              </label>
-              <input
-                {...register("password", {
-                  required: "Password is required",
-                })}
-                type="password"
-                id="password"
-                name="password"
-                className=" border rounded border-gray-200 w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
-                placeholder="Enter your password"
-              />
-              {errors.password && (
-                <p className="text-red-500 text-xs italic">
-                  {errors.password?.message}
-                </p>
-              )}
-            </div>
+          <FormWrapper onSubmit={handleLogin}>
+            <FormInput
+              name="email"
+              label="Email"
+              placeholder="Enter your email"
+              type="email"
+            />
+            <FormInput
+              name="password"
+              label="Password"
+              placeholder="Enter your password"
+              type="password"
+            />
 
             <Link
               href={"/forgot-password"}
@@ -114,7 +68,7 @@ const Login = () => {
             >
               Login
             </button>
-          </form>
+          </FormWrapper>
           <Link href={"/register"} className="">
             <p className="text-center my-4  w-full py-3 text-gray-500 text-lg">
               Don&apos;t have an account?{" "}
