@@ -1,50 +1,68 @@
 "use client";
+import FormInput from "@/app/components/Form/FormInput";
+import FormWrapper from "@/app/components/Form/FormWrapper";
 import Container from "@/app/components/shared/Container";
 import registerUser from "@/app/services/actions/registerUser";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
+import { z } from "zod";
 
-interface IName {
-  firstName: string;
-  lastName: string;
-}
-interface FormData {
-  name: IName;
-  email: string;
-  address: string;
-  contactNo: string;
-  password: string;
-  confirmPassword: string;
-  userType: "donor" | "volunteer";
-}
+const registerZodSchema = z
+  .object({
+    firstName: z
+      .string()
+      .min(1, "First name is required")
+      .min(2, "First name must be at least 2 characters")
+      .max(30, "First name must be at most 30 characters")
+      .regex(/^[A-Za-z]+$/, "First name can only contain letters"),
+    lastName: z
+      .string()
+      .min(1, "Last name is required")
+      .min(2, "Last name must be at least 2 characters")
+      .max(30, "Last name must be at most 30 characters")
+      .regex(/^[A-Za-z]+$/, "Last name can only contain letters"),
+    email: z
+      .string()
+      .min(1, "Email is required")
+      .email("Please enter a valid email"),
+    address: z
+      .string()
+      .min(1, "Address is required")
+      .min(5, "Address must be at least 5 characters")
+      .max(100, "Address must be at most 100 characters"),
+    contactNo: z
+      .string()
+      .min(1, "Contact number is required")
+      .max(20, "Please enter a valid contact number")
+      .regex(/^[0-9+()\s-]+$/, "Please enter a valid contact number"),
+
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string().min(1, "Confirm password is required"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 const Register = () => {
   const router = useRouter();
   const [userType, setUserType] = useState<"donor" | "volunteer">("donor");
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({
-    defaultValues: {
-      userType: "donor",
-    },
-  });
 
-  const onSubmit: SubmitHandler<FormData> = async (payload) => {
+  const handleLogin: SubmitHandler<FieldValues> = async (payload) => {
     const userData = {
       name: {
-        firstName: payload.name.firstName,
-        lastName: payload.name.lastName,
+        firstName: payload.firstName,
+        lastName: payload.lastName,
       },
       email: payload.email,
       address: payload.address,
       contactNo: payload.contactNo,
       password: payload.password,
-      role: payload.userType,
+      role: userType,
     };
 
     try {
@@ -65,7 +83,7 @@ const Register = () => {
   return (
     <div className="py-32 lg:px-10 min-h-[calc(100vh-90px)]">
       <Container>
-        <div className="w-full sm:w-2/3 xl:w-4/6 2xl:w-3/5 mx-auto border py-10 px-5 sm:px-12 md:px-20 lg:px-32">
+        <div className="w-full sm:w-2/3 lg:[90%] xl:w-4/6 2xl:w-3/5 mx-auto border py-10 px-5 sm:px-12 md:px-20 lg:px-8 ">
           <h2 className="text-3xl lg:text-4xl text-gray-800 text-center">
             Register
           </h2>
@@ -73,172 +91,61 @@ const Register = () => {
             Register your account
           </p>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
-            <div className="mb-4">
-              <label
-                htmlFor="firstName"
-                className="block text-gray-700 text-lg mb-2"
-              >
-                First Name
-              </label>
-              <input
-                {...register("name.firstName", {
-                  required: "First name is required",
-                })}
-                type="firstName"
-                id="firstName"
-                className="border rounded border-gray-200 w-full  py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
-                placeholder="Enter your name"
+          <FormWrapper
+            onSubmit={handleLogin}
+            resolver={zodResolver(registerZodSchema)}
+            defaultValues={{
+              firstName: "",
+              lastName: "",
+              email: "",
+              address: "",
+              contactNo: "",
+              password: "",
+              confirmPassword: "",
+            }}
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <FormInput
+                name="firstName"
+                label="First Name"
+                placeholder="Enter your First name"
               />
-              {errors.name?.firstName && (
-                <p className="text-red-500 text-xs italic">
-                  {errors.name?.firstName?.message}
-                </p>
-              )}
-            </div>{" "}
-            <div className="mb-4">
-              <label
-                htmlFor="lastName"
-                className="block text-gray-700 text-lg mb-2"
-              >
-                Last Name
-              </label>
-              <input
-                {...register("name.lastName", {
-                  required: "Last name is required",
-                })}
-                type="lastName"
-                id="lastName"
-                className="border rounded border-gray-200 w-full  py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
+              <FormInput
+                name="lastName"
+                label="Last Name"
                 placeholder="Enter your Last name"
               />
-              {errors.name?.lastName && (
-                <p className="text-red-500 text-xs italic">
-                  {errors.name?.lastName?.message}
-                </p>
-              )}
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="email"
-                className="block text-gray-700 text-lg mb-2"
-              >
-                Email
-              </label>
-              <input
-                {...register("email", {
-                  required: "Email is required",
-                  pattern: {
-                    value: /\S+@\S+\.\S+/,
-                    message: "Invalid email address",
-                  },
-                })}
+              <FormInput
+                name="email"
+                label="Email"
+                placeholder="Enter your Email"
                 type="email"
-                id="email"
-                className="border rounded border-gray-200 w-full  py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
-                placeholder="Enter your email"
               />
-              {errors.email && (
-                <p className="text-red-500 text-xs italic">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="Address"
-                className="block text-gray-700 text-lg mb-2"
-              >
-                Address
-              </label>
-              <input
-                {...register("address", {
-                  required: "Address is required",
-                })}
-                type="Address"
-                id="Address"
-                className="border rounded border-gray-200 w-full  py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
-                placeholder="Enter your Address"
+              <FormInput
+                name="contactNo"
+                label="Contact no"
+                placeholder="Enter your Contact no"
+                type="tel"
               />
-              {errors.email && (
-                <p className="text-red-500 text-xs italic">
-                  {errors.address?.message}
-                </p>
-              )}
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="contactNo"
-                className="block text-gray-700 text-lg mb-2"
-              >
-                ContactNo
-              </label>
-              <input
-                {...register("contactNo", {
-                  required: "ContactNo is required",
-                })}
-                type="contactNo"
-                id="contactNo"
-                className="border rounded border-gray-200 w-full  py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
-                placeholder="Enter your contactNo"
-              />
-              {errors.contactNo && (
-                <p className="text-red-500 text-xs italic">
-                  {errors.contactNo?.message}
-                </p>
-              )}
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="password"
-                className="block text-gray-700 text-lg mb-2"
-              >
-                Password
-              </label>
-              <input
-                {...register("password", {
-                  required: "Password is required",
-                  minLength: {
-                    value: 6,
-                    message: "Password must be at least 6 characters",
-                  },
-                })}
-                type="password"
-                id="password"
-                className="border rounded border-gray-200 w-full  py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
+              <div className="lg:col-span-2">
+                <FormInput
+                  name="address"
+                  label="Address"
+                  placeholder="Enter your Address"
+                />
+              </div>
+              <FormInput
+                name="password"
+                label="Password"
                 placeholder="Enter your password"
-              />
-              {errors.password && (
-                <p className="text-red-500 text-xs italic">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="confirmPassword"
-                className="block text-gray-700 text-lg mb-2"
-              >
-                Confirm Password
-              </label>
-              <input
-                {...register("confirmPassword", {
-                  required: "Please confirm your password",
-                  validate: (value) =>
-                    value ===
-                      (document.getElementById("password") as HTMLInputElement)
-                        .value || "Passwords do not match",
-                })}
                 type="password"
-                id="confirmPassword"
-                className="border rounded border-gray-200 w-full  py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
-                placeholder="Retype your password"
               />
-              {errors.confirmPassword && (
-                <p className="text-red-500 text-xs italic">
-                  {errors.confirmPassword.message}
-                </p>
-              )}
+              <FormInput
+                name="confirmPassword"
+                label="Confirm Password"
+                placeholder="Enter your password again"
+                type="password"
+              />
             </div>
             {/* User Type Selection */}
             <div className="mb-4">
@@ -269,16 +176,6 @@ const Register = () => {
                   Volunteer
                 </button>
               </div>
-              <input
-                type="hidden"
-                {...register("userType", { required: true })}
-                value={userType}
-              />
-              {errors.userType && (
-                <p className="text-red-500 text-xs italic">
-                  Please select a user type
-                </p>
-              )}
             </div>
             <button
               type="submit"
@@ -286,15 +183,17 @@ const Register = () => {
             >
               Register as {userType === "donor" ? "Donor" : "Volunteer"}
             </button>
-            <Link href="/login" className="">
-              <p className="text-center my-4 w-full  py-3 text-gray-500 text-lg">
-                Already have an account?{" "}
-                <span className="inline-block text-blue-500 hover:text-blue-600 hover:underline">
-                  Login here
-                </span>
-              </p>
+          </FormWrapper>
+
+          <div className="text-center my-4 w-full  py-3 text-gray-500 text-lg">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="inline-block text-blue-500 hover:text-blue-600 hover:underline"
+            >
+              Login here
             </Link>
-          </form>
+          </div>
         </div>
       </Container>
     </div>

@@ -4,10 +4,23 @@ import FormWrapper from "@/app/components/Form/FormWrapper";
 import Container from "@/app/components/shared/Container";
 import loginUser from "@/app/services/actions/loginUser";
 import { storeToken } from "@/app/services/auth.service";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FieldValues } from "react-hook-form";
 import toast from "react-hot-toast";
+import { z } from "zod";
+
+const loginZodSchema = z.object({
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Please enter a valid email"),
+  password: z
+    .string()
+    .min(1, "Password is required")
+    .min(6, "Password must be at least 6 characters"),
+});
 
 const Login = () => {
   const router = useRouter();
@@ -41,7 +54,11 @@ const Login = () => {
             Login to your account
           </p>
 
-          <FormWrapper onSubmit={handleLogin}>
+          <FormWrapper
+            onSubmit={handleLogin}
+            resolver={zodResolver(loginZodSchema)}
+            defaultValues={{ email: "", password: "" }}
+          >
             <FormInput
               name="email"
               label="Email"
@@ -55,12 +72,14 @@ const Login = () => {
               type="password"
             />
 
-            <Link
-              href={"/forgot-password"}
-              className="text-right hover:underline hover:text-green-700  text-lg text-blue-500"
-            >
-              <p className="text-right my-4  w-full">Forgot password?</p>
-            </Link>
+            <div className="text-right   text-lg text-blue-500 my-4 ">
+              <Link
+                href={"/forgot-password"}
+                className="text-right hover:underline hover:text-green-700 "
+              >
+                Forgot password?
+              </Link>
+            </div>
 
             <button
               type="submit"
