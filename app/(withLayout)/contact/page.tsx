@@ -2,8 +2,8 @@
 
 import { Mail, MapPin, PhoneCall } from "lucide-react";
 import { useState } from "react";
-import Breadcrumb from "../components/shared/Breadcrumb";
-import Container from "../components/shared/Container";
+import Breadcrumb from "../../components/shared/Breadcrumb";
+import Container from "../../components/shared/Container";
 
 interface FormData {
   firstName: string;

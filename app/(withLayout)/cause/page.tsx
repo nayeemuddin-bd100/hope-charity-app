@@ -1,5 +1,5 @@
-import Causes from "../components/cause/Causes";
-import Breadcrumb from "../components/shared/Breadcrumb";
+import Causes from "../../components/cause/Causes";
+import Breadcrumb from "../../components/shared/Breadcrumb";
 
 const Cause = () => {
   return (

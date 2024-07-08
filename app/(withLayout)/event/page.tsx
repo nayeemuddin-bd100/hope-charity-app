@@ -1,5 +1,5 @@
-import Events from "../components/home/Events";
-import Breadcrumb from "../components/shared/Breadcrumb";
+import Events from "../../components/home/Events";
+import Breadcrumb from "../../components/shared/Breadcrumb";
 
 const Event = () => {
   return (

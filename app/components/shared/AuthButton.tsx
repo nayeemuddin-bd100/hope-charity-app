@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React from "react";
 import { toast } from "react-hot-toast";
 import { isLoggedIn, removeUser } from "../../services/auth.service";
 

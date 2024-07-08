@@ -6,12 +6,32 @@ import {
   useForm,
 } from "react-hook-form";
 
+type TFormConfig = {
+  resolver?: any;
+  defaultValues?: Record<string, any>;
+};
+
 type FormWrapperProps = {
   children: React.ReactNode;
   onSubmit: SubmitHandler<FieldValues>;
-};
-const FormWrapper = ({ children, onSubmit }: FormWrapperProps) => {
-  const methods = useForm();
+} & TFormConfig;
+const FormWrapper = ({
+  children,
+  onSubmit,
+  resolver,
+  defaultValues,
+}: FormWrapperProps) => {
+  const formConfig: TFormConfig = {};
+
+  if (resolver) {
+    formConfig["resolver"] = resolver;
+  }
+
+  if (defaultValues) {
+    formConfig["defaultValues"] = defaultValues;
+  }
+
+  const methods = useForm(formConfig);
   const { handleSubmit, reset } = methods;
 
   const submitHandler: SubmitHandler<FieldValues> = (data) => {
@@ -20,7 +40,9 @@ const FormWrapper = ({ children, onSubmit }: FormWrapperProps) => {
   };
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(submitHandler)}>{children}</form>
+      <form onSubmit={handleSubmit(submitHandler)} className="mt-5">
+        {children}
+      </form>
     </FormProvider>
   );
 };

@@ -1,8 +1,8 @@
 "use client";
-import ProgressBar from "../components/cause/ProgressBar";
-import DonationForm from "../components/donate/DonationForm";
-import Breadcrumb from "../components/shared/Breadcrumb";
-import Container from "../components/shared/Container";
+import ProgressBar from "../../components/cause/ProgressBar";
+import DonationForm from "../../components/donate/DonationForm";
+import Breadcrumb from "../../components/shared/Breadcrumb";
+import Container from "../../components/shared/Container";
 
 const Donate = () => {
   return (
