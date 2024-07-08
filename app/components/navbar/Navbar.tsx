@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -8,6 +9,7 @@ import {
 } from "@/components/ui/sheet";
 import { usePathname } from "next/navigation";
 import { HiOutlineMenu } from "react-icons/hi";
+import AuthButton from "../shared/AuthButton";
 import Container from "../shared/Container";
 import Logo from "../shared/Logo";
 import MenuItem from "./MenuItem";
@@ -19,11 +21,11 @@ const menuItems = [
   { name: "Event", path: "/event", current: false },
   // { name: "Blog", path: "/blog", current: false },
   { name: "Contact", path: "/contact", current: false },
-  { name: "Login", path: "/login", current: false },
 ];
 
 const Navbar = () => {
   const pathname = usePathname();
+
   return (
     <nav className="fixed w-full h-[90px] bg-white shadow-md z-50 top-0">
       <Container>
@@ -44,6 +46,8 @@ const Navbar = () => {
                   active={pathname === item.path}
                 />
               ))}
+
+              <AuthButton />
             </div>
           </div>
 
@@ -58,8 +62,8 @@ const Navbar = () => {
               </Button>
             </SheetTrigger>
 
-            <SheetContent className="bg-white">
-              <div className="p-4">
+            <SheetContent className="bg-white flex flex-col justify-center">
+              <div className="flex flex-col items-center space-y-4">
                 {menuItems.map((item) => (
                   <SheetClose asChild key={item.name}>
                     <MenuItem
@@ -70,6 +74,7 @@ const Navbar = () => {
                     />
                   </SheetClose>
                 ))}
+                <AuthButton />
               </div>
             </SheetContent>
           </Sheet>
