@@ -5,6 +5,7 @@ interface FormInputProps {
   label: string;
   type?: string;
   placeholder?: string;
+  required?: boolean;
 }
 
 const FormInput = ({
@@ -12,6 +13,7 @@ const FormInput = ({
   label,
   type = "text",
   placeholder,
+  required = false,
 }: FormInputProps) => {
   const { control } = useFormContext();
 
@@ -25,10 +27,13 @@ const FormInput = ({
             {label}
           </label>
           <input
+            required={required}
             {...field}
             type={type}
             id={name}
-            className="border rounded border-gray-200 w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500"
+            className={`border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500 ${
+              error ? "border-red-500" : "border-gray-200"
+            }`}
             placeholder={placeholder}
           />
           {error && (
