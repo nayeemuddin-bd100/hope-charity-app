@@ -1,8 +1,7 @@
-import { AOSInit } from "@/provider/AOSProvider";
+import { AOSInit } from "@/app/providers/AOSProvider";
 import type { Metadata } from "next";
 import { Barlow_Condensed } from "next/font/google";
-import Footer from "./components/footer/Footer";
-import Navbar from "./components/navbar/Navbar";
+import ClientOnly from "./components/shared/ClientOnly";
 import "./globals.css";
 import ToastProvider from "./providers/ToastProvider";
 
@@ -23,14 +22,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AOSInit />
+      <ClientOnly>
+        <AOSInit />
+        <ToastProvider />
+      </ClientOnly>
       <body
         className={`${barlowCondensed.className} w-full h-full m-0 p-0 overflow-x-hidden`}
       >
-        <ToastProvider />
-        <Navbar />
         {children}
-        <Footer />
       </body>
     </html>
   );
