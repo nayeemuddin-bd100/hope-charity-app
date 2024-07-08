@@ -1,11 +1,8 @@
 "use server";
 
-interface IUserData {
-  email: string;
-  password: string;
-}
+import { FieldValues } from "react-hook-form";
 
-const loginUser = async (data: IUserData) => {
+const loginUser = async (data: FieldValues) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/auth/login`,
     {
