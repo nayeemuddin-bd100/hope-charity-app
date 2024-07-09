@@ -1,16 +1,7 @@
 "use client";
+import CreateEventModal from "@/app/components/dashboard/CreateEventModal";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Pagination } from "@/components/ui/pagination";
-import { Select } from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -59,62 +50,9 @@ export default function ManageEvents() {
       <h1 className="text-3xl font-bold mb-6">Manage Events</h1>
       <div className="mb-4 flex justify-between">
         <Input placeholder="Search events..." className="max-w-sm" />
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>Create New Event</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create New Event</DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Name
-                </Label>
-                <Input
-                  id="name"
-                  value={newEvent.name}
-                  onChange={(e) =>
-                    setNewEvent({ ...newEvent, name: e.target.value })
-                  }
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="date" className="text-right">
-                  Date
-                </Label>
-                <Input
-                  id="date"
-                  type="date"
-                  value={newEvent.date}
-                  onChange={(e) =>
-                    setNewEvent({ ...newEvent, date: e.target.value })
-                  }
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="volunteer" className="text-right">
-                  Volunteer
-                </Label>
-                <Select
-                  // id="volunteer"
-                  value={newEvent.volunteer}
-                  onValueChange={(value) =>
-                    setNewEvent({ ...newEvent, volunteer: value })
-                  }
-                >
-                  <option value="Jane Smith">Jane Smith</option>
-                  <option value="John Doe">John Doe</option>
-                </Select>
-              </div>
-            </div>
-            <Button onClick={createEvent}>Create Event</Button>
-          </DialogContent>
-        </Dialog>
+        <CreateEventModal />
       </div>
+
       <Table>
         <TableHeader>
           <TableRow>
@@ -131,11 +69,15 @@ export default function ManageEvents() {
               <TableCell>{event.date}</TableCell>
               <TableCell>{event.volunteer}</TableCell>
               <TableCell>
-                <Button variant="outline" className="mr-2">
+                <Button
+                  variant="outline"
+                  className=" mr-2 border border-green-500 text-green-500 hover:bg-green-500 hover:text-white "
+                >
                   Edit
                 </Button>
                 <Button
-                  variant="destructive"
+                  variant="outline"
+                  className="border border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
                   onClick={() => deleteEvent(event.id)}
                 >
                   Delete
@@ -145,12 +87,6 @@ export default function ManageEvents() {
           ))}
         </TableBody>
       </Table>
-      <Pagination
-      // currentPage={currentPage}
-      // totalCount={events.length}
-      // pageSize={eventsPerPage}
-      // onPageChange={setCurrentPage}
-      />
     </div>
   );
 }
