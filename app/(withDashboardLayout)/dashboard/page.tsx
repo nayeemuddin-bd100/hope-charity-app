@@ -1,3 +1,5 @@
+import CreateCauseModal from "@/app/components/dashboard/CreateCauseModal";
+import CreateEventModal from "@/app/components/dashboard/CreateEventModal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Calendar, DollarSign, Users } from "lucide-react";
 import Link from "next/link";
@@ -93,26 +95,20 @@ export default function DashboardPage() {
           <CardTitle>Quick Actions</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-4">
-          <Link
-            href="/dashboard/causes/new"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-          >
-            Create New Cause
-          </Link>
-          <Link
-            href="/dashboard/events/new"
+          <CreateCauseModal className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" />
+          <CreateEventModal
+            label="  Schedule Event"
             className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-          >
-            Schedule Event
-          </Link>
+          />
+
           <Link
-            href="/dashboard/donations"
+            href="/dashboard/donation"
             className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded"
           >
             View Recent Donations
           </Link>
           <Link
-            href="/dashboard/users"
+            href="/dashboard/user"
             className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded"
           >
             Manage Users
