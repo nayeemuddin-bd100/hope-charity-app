@@ -36,7 +36,7 @@ export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="min-h-screen">
+    <div className="md:min-h-screen">
       {/* Desktop Sidebar */}
       <div className="hidden md:flex w-64 bg-white h-screen border-r flex-col">
         {/* Logo */}
@@ -66,7 +66,10 @@ export default function Sidebar() {
             <Menu />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="p-0 flex flex-col bg-white">
+        <SheetContent
+          side="left"
+          className="p-0 flex flex-col justify-center bg-white"
+        >
           {/* Logo */}
           <div className="p-4">
             <Logo />
