@@ -1,5 +1,5 @@
 "use client";
-import CauseModal from "@/app/components/dashboard/causeModal";
+import CreateCauseModal from "@/app/components/dashboard/CreateCauseModal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -32,7 +32,7 @@ export default function ManageCauses() {
       <h1 className="text-3xl font-bold mb-6">Manage Causes</h1>
       <div className="mb-4 flex justify-between">
         <Input placeholder="Search causes..." className="max-w-sm" />
-        <CauseModal />
+        <CreateCauseModal />
       </div>
       <Table>
         <TableHeader>
@@ -68,7 +68,6 @@ export default function ManageCauses() {
           ))}
         </TableBody>
       </Table>
-      {/* <Pagination /> */}
     </div>
   );
 }
