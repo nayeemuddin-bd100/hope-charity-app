@@ -1,6 +1,7 @@
 "use client";
 import FormInput from "@/app/components/Form/FormInput";
 import FormWrapper from "@/app/components/Form/FormWrapper";
+import ImageUploader from "@/app/components/Form/ImageUploader";
 import Container from "@/app/components/shared/Container";
 import registerUser from "@/app/services/actions/registerUser";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -42,6 +43,14 @@ const registerZodSchema = z
 
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string().min(1, "Confirm password is required"),
+    profileImage: z
+      .instanceof(File)
+      .refine((file) => file.size <= 1000000, `Max file size is 1MB.`)
+      .refine(
+        (file) => ["image/jpeg", "image/png"].includes(file.type),
+        "Only .jpg and .png formats are supported."
+      )
+      .nullable(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
@@ -53,6 +62,7 @@ const Register = () => {
   const [userType, setUserType] = useState<"donor" | "volunteer">("donor");
 
   const handleLogin: SubmitHandler<FieldValues> = async (payload) => {
+    console.log("🚀 payload:", payload);
     const userData = {
       name: {
         firstName: payload.firstName,
@@ -102,6 +112,7 @@ const Register = () => {
               contactNo: "",
               password: "",
               confirmPassword: "",
+              profileImage: null,
             }}
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -139,6 +150,11 @@ const Register = () => {
                 label="Password"
                 placeholder="Enter your password"
                 type="password"
+              />
+              <ImageUploader
+                name="profileImage"
+                label="Profile Image"
+                required
               />
               <FormInput
                 name="confirmPassword"
