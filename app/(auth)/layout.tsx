@@ -7,7 +7,7 @@ export default function authLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className={` w-full h-full m-0 p-0 overflow-x-hidden`}>
       <Navbar />
       {children}
     </div>

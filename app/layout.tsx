@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Barlow_Condensed } from "next/font/google";
 import ClientOnly from "./components/shared/ClientOnly";
 import "./globals.css";
+import Providers from "./providers/Providers";
 import ToastProvider from "./providers/ToastProvider";
 
 const barlowCondensed = Barlow_Condensed({
@@ -21,16 +22,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <ClientOnly>
-        <AOSInit />
-        <ToastProvider />
-      </ClientOnly>
-      <body
-        className={`${barlowCondensed.className} w-full h-full m-0 p-0 overflow-x-hidden`}
-      >
-        {children}
-      </body>
-    </html>
+    <Providers>
+      <html lang="en">
+        <ClientOnly>
+          <AOSInit />
+          <ToastProvider />
+        </ClientOnly>
+        <body
+          className={`${barlowCondensed.className} w-full h-full m-0 p-0 overflow-x-hidden`}
+        >
+          {children}
+        </body>
+      </html>
+    </Providers>
   );
 }
