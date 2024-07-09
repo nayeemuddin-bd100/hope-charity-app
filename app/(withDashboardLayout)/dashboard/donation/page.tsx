@@ -96,7 +96,8 @@ export default function DonationsPage() {
               <TableCell>{donation.date}</TableCell>
               <TableCell>
                 <Button
-                  variant="destructive"
+                  variant="outline"
+                  className="border border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
                   onClick={() => deleteDonation(donation.id)}
                 >
                   Delete
