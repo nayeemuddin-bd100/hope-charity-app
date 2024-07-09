@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
 import { HiOutlineMenu } from "react-icons/hi";
 import AuthButton from "../shared/AuthButton";
 import Container from "../shared/Container";
+import DashboardButton from "../shared/DashboardButton";
 import Logo from "../shared/Logo";
 import MenuItem from "./MenuItem";
 
@@ -47,6 +48,7 @@ const Navbar = () => {
                 />
               ))}
 
+              <DashboardButton />
               <AuthButton />
             </div>
           </div>
@@ -74,6 +76,7 @@ const Navbar = () => {
                     />
                   </SheetClose>
                 ))}
+                <DashboardButton />
                 <AuthButton />
               </div>
             </SheetContent>
