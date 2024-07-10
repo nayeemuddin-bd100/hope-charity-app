@@ -1,7 +1,6 @@
 "use client";
 import FormInput from "@/app/components/Form/FormInput";
 import FormWrapper from "@/app/components/Form/FormWrapper";
-import ImageUploader from "@/app/components/Form/ImageUploader";
 import Container from "@/app/components/shared/Container";
 import registerUser from "@/app/services/actions/registerUser";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,26 +42,30 @@ const registerZodSchema = z
 
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string().min(1, "Confirm password is required"),
-    profileImage: z
-      .instanceof(File)
-      .refine((file) => file.size <= 1000000, `Max file size is 1MB.`)
-      .refine(
-        (file) => ["image/jpeg", "image/png"].includes(file.type),
-        "Only .jpg and .png formats are supported."
-      )
-      .nullable(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ["confirmPassword"],
   });
 
+// profileImage: z
+//   .string()
+//   .min(1, "Profile image is required")
+//   .url("Invalid image URL"),
+// profileImage: z
+//   .instanceof(File, { message: "Profile image is required" })
+//   .refine((file) => file.size <= 1000000, `Max file size is 1MB.`)
+//   .refine(
+//     (file) => ["image/jpeg", "image/png"].includes(file.type),
+//     "Only .jpg and .png formats are supported."
+//   ),
 const Register = () => {
   const router = useRouter();
   const [userType, setUserType] = useState<"donor" | "volunteer">("donor");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin: SubmitHandler<FieldValues> = async (payload) => {
-    console.log("🚀 payload:", payload);
+    setIsLoading(true);
     const userData = {
       name: {
         firstName: payload.firstName,
@@ -87,6 +90,9 @@ const Register = () => {
     } catch (error) {
       console.log(error);
       toast.error("Account register failed");
+    } finally {
+      setIsLoading(false);
+      console.log("🚀 userData:", userData);
     }
   };
 
@@ -112,7 +118,6 @@ const Register = () => {
               contactNo: "",
               password: "",
               confirmPassword: "",
-              profileImage: null,
             }}
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -151,11 +156,7 @@ const Register = () => {
                 placeholder="Enter your password"
                 type="password"
               />
-              <ImageUploader
-                name="profileImage"
-                label="Profile Image"
-                required
-              />
+
               <FormInput
                 name="confirmPassword"
                 label="Confirm Password"
@@ -195,9 +196,12 @@ const Register = () => {
             </div>
             <button
               type="submit"
+              disabled={isLoading}
               className="bg-green-500 hover:bg-green-700 w-full text-white font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline"
             >
-              Register as {userType === "donor" ? "Donor" : "Volunteer"}
+              {isLoading
+                ? "Loading..."
+                : `Register as ${userType === "donor" ? "Donor" : "Volunteer"}`}
             </button>
           </FormWrapper>
 
