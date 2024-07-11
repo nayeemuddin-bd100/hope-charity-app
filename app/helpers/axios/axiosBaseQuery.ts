@@ -1,4 +1,6 @@
 import { IMeta } from "@/app/types";
+import { authKey } from "@/constant/authKey";
+import { getFromLocalStorage } from "@/lib/localStorage";
 import type { BaseQueryFn } from "@reduxjs/toolkit/query";
 import type { AxiosError, AxiosRequestConfig } from "axios";
 import { axiosInstance } from "./axiosInstance";
@@ -20,6 +22,7 @@ export const axiosBaseQuery =
     unknown
   > =>
   async ({ url, method, data, params, headers, contentType }) => {
+    const token = getFromLocalStorage(authKey);
     try {
       const result = await axiosInstance({
         url: baseUrl + url,
@@ -27,11 +30,12 @@ export const axiosBaseQuery =
         data,
         params,
         headers: {
-          ...headers,
           "Content-Type": contentType || "application/json",
+          Authorization: token,
         },
+        withCredentials: true,
       });
-      return result;
+      return { data: result?.data };
     } catch (axiosError) {
       const err = axiosError as AxiosError;
       return {
