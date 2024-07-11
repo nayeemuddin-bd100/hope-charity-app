@@ -60,6 +60,9 @@ const ImageUploader = ({ name, label }: ImageUploaderProps) => {
                 maxImageHeight: 800,
               }}
               onSuccess={(result: any) => handleImageUpload(result, onChange)}
+              onError={(error: any) => {
+                console.error("Cloudinary upload error:", error);
+              }}
             >
               {({ open }) => (
                 <button
