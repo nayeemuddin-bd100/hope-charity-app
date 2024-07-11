@@ -31,6 +31,11 @@ const FormInput = ({
             {...field}
             type={type}
             id={name}
+            onChange={(e) => {
+              const value =
+                type === "number" ? Number(e.target.value) : e.target.value;
+              field.onChange(value);
+            }}
             className={`border rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:border-green-500 ${
               error ? "border-red-500" : "border-gray-200"
             }`}
