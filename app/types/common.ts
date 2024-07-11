@@ -1,4 +1,5 @@
 import { USER_ROLES } from "@/constant/role";
+import { JwtPayload } from "jwt-decode";
 
 export interface IMeta {
   page: number;
@@ -27,3 +28,9 @@ export interface IGenericErrorMsg {
   path: string | number;
   message: string;
 }
+
+export type CustomJwtPayload = {
+  _id: string;
+  loginUserEmail: string;
+  role: string;
+} & JwtPayload;
