@@ -1,5 +1,11 @@
 "use client";
 import CreateCauseModal from "@/app/components/dashboard/CreateCauseModal";
+import { DeleteConfirmationDialog } from "@/app/components/shared/DeleteConfirmationDialog";
+import { Spinner } from "@/app/components/shared/Spinner";
+import {
+  useDeleteCauseMutation,
+  useGetAllCauseQuery,
+} from "@/app/redux/api/causeApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,62 +16,76 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function ManageCauses() {
-  const [causes, setCauses] = useState([
-    {
-      id: 1,
-      name: "Clean Water Initiative",
-      description: "Providing clean water to rural areas",
-      goal: 10000,
-    },
-    {
-      id: 2,
-      name: "Education for All",
-      description: "Supporting education in underprivileged communities",
-      goal: 15000,
-    },
-  ]);
+  const { data, isLoading } = useGetAllCauseQuery({});
+  const [deleteCause] = useDeleteCauseMutation();
+
+  const handleDeleteCause = async (causeId: any) => {
+    try {
+      const res = await deleteCause(causeId).unwrap();
+      if (res?.success && res?.statusCode === 200) {
+        toast.success(res?.message);
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Manage Causes</h1>
-      <div className="mb-4 flex justify-between">
+      <div
+        className="mb-4 flex  min-[0px]:flex-col-reverse sm:flex-row 
+        min-[768px]:flex-col-reverse
+        min-[819px]:flex-row
+        gap-y-2 justify-between "
+      >
         <Input placeholder="Search causes..." className="max-w-sm" />
-        <CreateCauseModal />
+        <div className="max-w-xs">
+          <CreateCauseModal />
+        </div>
       </div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Description</TableHead>
+            <TableHead>Title</TableHead>
             <TableHead>Goal</TableHead>
+            <TableHead>Raised</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {causes.map((cause) => (
-            <TableRow key={cause.id}>
-              <TableCell>{cause.name}</TableCell>
-              <TableCell>{cause.description}</TableCell>
-              <TableCell>${cause.goal}</TableCell>
-              <TableCell>
-                <Button
-                  variant="outline"
-                  className=" mr-2 border border-green-500 text-green-500 hover:bg-green-500 hover:text-white "
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="outline"
-                  className="border border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
-                  // onClick={() => deleteCause(cause.id)}
-                >
-                  Delete
-                </Button>
+          {isLoading ? (
+            <TableRow>
+              <TableCell colSpan={5} className="h-24 text-center">
+                <Spinner className="mx-auto h-6 w-6" />
               </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            //TODO: add cause type
+
+            data?.data?.slice(0, 10)?.map((cause: any) => (
+              <TableRow key={cause._id}>
+                <TableCell>{cause.title}</TableCell>
+                <TableCell>${cause.goalAmount}</TableCell>
+                <TableCell>${cause.raisedAmount}</TableCell>
+                <TableCell className=" flex flex-col sm:flex-row  gap-y-3 sm:gap-y-0 ">
+                  <Button
+                    variant="outline"
+                    className=" mr-2 border border-green-500 text-green-500 hover:bg-green-500 hover:text-white "
+                  >
+                    Edit
+                  </Button>
+                  <DeleteConfirmationDialog
+                    onConfirm={() => handleDeleteCause(cause._id)}
+                    itemType="cause"
+                  />
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </div>

@@ -1,111 +1,112 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { useCreateCauseMutation } from "@/app/redux/api/causeApi";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { FieldValues, SubmitHandler } from "react-hook-form";
+import toast from "react-hot-toast";
+import FormInput from "../Form/FormInput";
+import FormWrapper from "../Form/FormWrapper";
+import ImageUploader from "../Form/ImageUploader";
+import CustomModal from "../shared/CustomModal";
+import { Spinner } from "../shared/Spinner";
+
+type CreateCauseModalProps = {
+  label?: string;
+  className?: string;
+};
 
 const CreateCauseModal = ({
   label = "Create New Cause",
   className,
-}: {
-  label?: string;
-  className?: string;
-}) => {
-  const [open, setOpen] = useState(false);
-  const [newCause, setNewCause] = useState({
-    name: "",
-    description: "",
-    goal: Number(0),
-  });
-  const [causes, setCauses] = useState([
-    {
-      id: 1,
-      name: "Clean Water Initiative",
-      description: "Providing clean water to rural areas",
-      goal: 10000,
-    },
-    {
-      id: 2,
-      name: "Education for All",
-      description: "Supporting education in underprivileged communities",
-      goal: 15000,
-    },
-  ]);
+}: CreateCauseModalProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [createCause] = useCreateCauseMutation();
 
-  const createCause = () => {
-    setCauses([...causes, { id: causes.length + 1, ...newCause }]);
-    setNewCause({ name: "", description: "", goal: Number(0) });
+  const handleCreateCause: SubmitHandler<FieldValues> = async (payload) => {
+    setIsLoading(true);
+    try {
+      const data = {
+        title: payload?.title,
+        description: payload?.description,
+        goalAmount: Number(payload?.goalAmount),
+        image: payload?.image,
+      };
+      const res = await createCause(data).unwrap();
+      if (res?.success && res?.data?._id) {
+        toast.success("Cause created successfully!");
+      }
+      setIsOpen(false);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to create cause");
+    } finally {
+      setIsLoading(false);
+    }
   };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className={cn("text-white bg-primary", className)}>
-          {label}
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="bg-white">
-        <DialogHeader>
-          <DialogTitle>Create New Cause</DialogTitle>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input
-              id="name"
-              value={newCause.name}
-              onChange={(e) =>
-                setNewCause({ ...newCause, name: e.target.value })
-              }
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="description" className="text-right">
-              Description
-            </Label>
-            <Textarea
-              id="description"
-              value={newCause.description}
-              onChange={(e) =>
-                setNewCause({ ...newCause, description: e.target.value })
-              }
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="goal" className="text-right">
-              Goal ($)
-            </Label>
-            <Input
-              id="goal"
-              type="number"
-              value={newCause.goal}
-              onChange={(e) =>
-                setNewCause({ ...newCause, goal: Number(e.target.value) })
-              }
-              className="col-span-3"
-            />
-          </div>
-        </div>
-        <Button
-          onClick={() => (createCause(), setOpen(false))}
-          className="text-white"
+    <>
+      <button
+        onClick={() => setIsOpen(true)}
+        className={cn(
+          "bg-slate-800 hover:bg-slate-900 text-white  py-2 px-4 ",
+          className
+        )}
+      >
+        {label}
+      </button>
+      <CustomModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Create New Cause"
+      >
+        <FormWrapper
+          onSubmit={handleCreateCause}
+          // resolver={zodResolver(createCauseZodSchema)}
+          defaultValues={{
+            title: "aa",
+            description: "aa",
+            goalAmount: 10,
+            image: "aa",
+          }}
         >
-          Create Cause
-        </Button>
-      </DialogContent>
-    </Dialog>
+          <FormInput
+            name="title"
+            label="Title"
+            placeholder="Enter cause title"
+          />
+          <FormInput
+            name="description"
+            label="Description"
+            placeholder="Enter cause description"
+          />
+          <FormInput
+            name="goalAmount"
+            label="Goal Amount"
+            type="number"
+            placeholder="Enter goal amount"
+          />
+          <ImageUploader name="image" label="Cause Image" />
+          <div className="mt-4 flex justify-end space-x-2">
+            <button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              className="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              {isLoading ? <Spinner /> : "Create Cause"}
+            </button>
+          </div>
+        </FormWrapper>
+      </CustomModal>
+    </>
   );
 };
 
