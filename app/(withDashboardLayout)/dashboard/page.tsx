@@ -95,7 +95,7 @@ export default function DashboardPage() {
           <CardTitle>Quick Actions</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-4">
-          <CreateCauseModal className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" />
+          <CreateCauseModal className="bg-indigo-600 hover:bg-indigo-700 rounded" />
           <CreateEventModal
             label="  Schedule Event"
             className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
