@@ -1,10 +1,17 @@
-import { AOSInit } from "@/app/providers/AOSProvider";
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { Barlow_Condensed } from "next/font/google";
-import ClientOnly from "./components/shared/ClientOnly";
 import "./globals.css";
-import Providers from "./providers/Providers";
-import ToastProvider from "./providers/ToastProvider";
+
+//Dynamic imports for client-side only components
+const DynamicAOSInit = dynamic(
+  () => import("@/app/providers/AOSProvider").then((mod) => mod.AOSInit),
+  { ssr: false }
+);
+const DynamicToastProvider = dynamic(
+  () => import("./providers/ToastProvider"),
+  { ssr: false }
+);
 
 const barlowCondensed = Barlow_Condensed({
   subsets: ["latin"],
@@ -22,18 +29,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Providers>
-      <html lang="en">
-        <ClientOnly>
-          <AOSInit />
-          <ToastProvider />
-        </ClientOnly>
-        <body
-          className={`${barlowCondensed.className} w-full h-full m-0 p-0 overflow-x-hidden`}
-        >
-          {children}
-        </body>
-      </html>
-    </Providers>
+    <html lang="en">
+      <body
+        className={`${barlowCondensed.className} w-full h-full m-0 p-0 overflow-x-hidden`}
+      >
+        <DynamicAOSInit />
+        <DynamicToastProvider />
+
+        {children}
+      </body>
+    </html>
   );
 }
