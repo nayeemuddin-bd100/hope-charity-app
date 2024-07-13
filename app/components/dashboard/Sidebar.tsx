@@ -43,7 +43,7 @@ export default function Sidebar() {
         <div className="p-4">
           <Logo />
         </div>
-        <nav className="my-8 ml-5 flex flex-col justify-between h-full">
+        <nav className="my-8 flex flex-col justify-between h-full">
           <div>
             {menuItems.map((item, index) => (
               <SidebarMenu key={index} item={item} pathname={pathname} />
