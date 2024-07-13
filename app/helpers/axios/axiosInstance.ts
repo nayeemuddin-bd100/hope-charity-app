@@ -62,10 +62,14 @@ axiosInstance.interceptors.response.use(
       const responseObj: IErrorResponse = {
         success: error?.response?.data?.success || false,
         message: error?.response?.data?.message || "Something went wrong",
-        errorMessages: error?.response?.data?.errorMessages || [],
+        errorMessages: error?.response?.data?.errorMessages || [
+          { path: "", message: "Something went wrong" },
+        ],
         statusCode: error?.response?.status || 500,
       };
-      toast.error(responseObj.message);
+      toast.error(
+        responseObj.errorMessages?.[0]?.message || responseObj.message
+      );
       return responseObj;
     }
   }
