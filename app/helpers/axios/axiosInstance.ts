@@ -1,5 +1,6 @@
 "use client";
 
+import { setAccessToken } from "@/app/services/actions/setAccessToken";
 import { getNewAccessToken } from "@/app/services/auth.service";
 import { IErrorResponse, ISuccessResponse } from "@/app/types";
 import { authKey } from "@/constant/authKey";
@@ -33,8 +34,6 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   //@ts-ignore
   function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
     const responseObj: ISuccessResponse = {
       data: response?.data?.data,
       meta: response?.data?.meta,
@@ -50,11 +49,11 @@ axiosInstance.interceptors.response.use(
     if (error?.response?.status === 401 && !config?.sent) {
       config.sent = true;
       const response = await getNewAccessToken();
-      console.log("🚀 ~ response:", response);
       const accessToken = response?.data?.accessToken;
       if (accessToken) {
         config.headers["Authorization"] = accessToken;
         setToLocalStorage(authKey, accessToken);
+        setAccessToken(accessToken);
         return axiosInstance(config);
       }
 
@@ -66,6 +65,7 @@ axiosInstance.interceptors.response.use(
         errorMessages: error?.response?.data?.errorMessages || [],
         statusCode: error?.response?.status || 500,
       };
+      toast.error(responseObj.message);
       return responseObj;
     }
   }
