@@ -1,6 +1,8 @@
 "use client";
 import { useCreateCauseMutation } from "@/app/redux/api/causeApi";
+import { createCauseZodSchema } from "@/app/validationSchema/causeZodSchema";
 import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -63,12 +65,12 @@ const CreateCauseModal = ({
       >
         <FormWrapper
           onSubmit={handleCreateCause}
-          // resolver={zodResolver(createCauseZodSchema)}
+          resolver={zodResolver(createCauseZodSchema)}
           defaultValues={{
-            title: "aa",
-            description: "aa",
-            goalAmount: 10,
-            image: "aa",
+            title: "",
+            description: "",
+            goalAmount: 0,
+            image: "",
           }}
         >
           <FormInput
