@@ -8,11 +8,12 @@ import { Controller, useFormContext } from "react-hook-form";
 interface ImageUploaderProps {
   name: string;
   label: string;
+  imageUrl?: string;
 }
 
-const ImageUploader = ({ name, label }: ImageUploaderProps) => {
+const ImageUploader = ({ name, label, imageUrl }: ImageUploaderProps) => {
   const { control, watch, resetField } = useFormContext();
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(imageUrl || null);
   const [fileName, setFileName] = useState<string | null>(null);
 
   const imageFieldValue = watch(name);
