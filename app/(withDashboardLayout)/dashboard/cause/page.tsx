@@ -137,7 +137,7 @@ export default function ManageCauses() {
               </TableCell>
             </TableRow>
           ) : (
-            data?.causes?.slice(0, 10)?.map((cause: ICause) => (
+            data?.causes?.map((cause: ICause) => (
               <TableRow key={cause?._id}>
                 <TableCell>{cause?.title}</TableCell>
                 <TableCell>${cause?.goalAmount}</TableCell>
