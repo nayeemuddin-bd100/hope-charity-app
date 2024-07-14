@@ -6,6 +6,7 @@ interface FormInputProps {
   type?: string;
   placeholder?: string;
   required?: boolean;
+  disabled?: boolean;
 }
 
 const FormInput = ({
@@ -14,6 +15,7 @@ const FormInput = ({
   type = "text",
   placeholder,
   required = false,
+  disabled = false,
 }: FormInputProps) => {
   const { control } = useFormContext();
 
@@ -30,6 +32,7 @@ const FormInput = ({
             required={required}
             {...field}
             type={type}
+            disabled={disabled}
             id={name}
             onChange={(e) => {
               const value =

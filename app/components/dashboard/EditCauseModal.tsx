@@ -36,6 +36,7 @@ const EditCauseModal = ({ causeId }: EditCauseModalProps) => {
         updatedData: {
           title: payload?.title,
           description: payload?.description,
+          goalAmount: Number(payload?.goalAmount),
           image: payload?.image,
         },
       };
@@ -76,6 +77,8 @@ const EditCauseModal = ({ causeId }: EditCauseModalProps) => {
             defaultValues={{
               title: causeData?.data?.title || "",
               description: causeData?.data?.description || "",
+              goalAmount: Number(causeData?.data?.goalAmount) || 0,
+              raisedAmount: Number(causeData?.data?.raisedAmount) || 0,
               image: causeData?.data?.image || "",
             }}
           >
@@ -88,6 +91,19 @@ const EditCauseModal = ({ causeId }: EditCauseModalProps) => {
               name="description"
               label="Description"
               placeholder="Enter cause description"
+            />
+            <FormInput
+              name="goalAmount"
+              label="Goal Amount"
+              placeholder="Enter goal amount"
+              type="number"
+            />
+            <FormInput
+              name="raisedAmount"
+              label="Raised Amount"
+              placeholder="Enter raised amount"
+              type="number"
+              disabled
             />
             <ImageUploader
               name="image"
