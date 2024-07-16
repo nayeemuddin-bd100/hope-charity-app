@@ -1,4 +1,5 @@
 import { authKey } from "@/constant/authKey";
+import { getCookie } from "cookies-next";
 import { decodedToken } from "../../lib/jwtToken";
 import {
   getFromLocalStorage,
@@ -22,9 +23,10 @@ export const getUserInfoFromToken = () => {
 };
 
 export const isLoggedIn = () => {
-  const authToken = getFromLocalStorage(authKey);
+  const accessTokenFromLocalStorage = getFromLocalStorage(authKey);
+  const accessTokenFromCookie = getCookie(authKey);
 
-  return !!authToken;
+  return !!(accessTokenFromLocalStorage && accessTokenFromCookie);
 };
 
 export const removeUser = () => {
