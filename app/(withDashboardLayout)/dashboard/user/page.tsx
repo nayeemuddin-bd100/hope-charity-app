@@ -58,7 +58,6 @@ const ManageUsers = () => {
     query["searchTerm"] = searchTerm;
   }
   const { data, isLoading } = useGetAllUserQuery({ ...query });
-  console.log("🚀 ~ ManageUsers ~ data:", data);
 
   const [deleteUser] = useDeleteUserMutation();
 
@@ -169,11 +168,11 @@ const ManageUsers = () => {
                 <TableCell>{user?.email}</TableCell>
                 <TableCell>
                   <span
-                    className={`px-2 py-1 rounded font-medium ${getRoleStyle(
+                    className={`px-2 py-1 rounded font-medium capitalize ${getRoleStyle(
                       String(user?.role).toLowerCase()
                     )}`}
                   >
-                    {String(user?.role).toUpperCase()}
+                    {String(user?.role)}
                   </span>
                 </TableCell>
                 <TableCell className=" flex flex-col sm:flex-row  gap-3 ">
