@@ -7,8 +7,6 @@ import { isLoggedIn } from "../../services/auth.service";
 const AuthButton = () => {
   const router = useRouter();
   const isLogin = isLoggedIn();
-  console.log("🚀 ~ AuthButton ~ isLogin:", isLogin);
-
   return (
     <div>
       {isLogin ? (
