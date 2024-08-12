@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
-  Calendar,
   DollarSign,
   Heart,
   Home,
@@ -20,7 +19,7 @@ import SidebarMenu from "./SidebarMenu";
 const menuItems = [
   { icon: Home, label: "Dashboard", href: "/dashboard" },
   { icon: Heart, label: "Manage Causes", href: "/dashboard/cause" },
-  { icon: Calendar, label: "Manage Events", href: "/dashboard/event" },
+  // { icon: Calendar, label: "Manage Events", href: "/dashboard/event" },
   { icon: Users, label: "Manage Users", href: "/dashboard/user" },
   { icon: DollarSign, label: "Manage Donations", href: "/dashboard/donation" },
 ];
