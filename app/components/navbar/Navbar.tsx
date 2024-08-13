@@ -37,7 +37,7 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <div className="ml-10 flex items-baseline space-x-4">
               {menuItems.map((item) => (
                 <MenuItem
@@ -55,7 +55,7 @@ const Navbar = () => {
 
           {/* Mobile Menu (Drawer) */}
           <Sheet>
-            <SheetTrigger asChild className="md:hidden">
+            <SheetTrigger asChild className="lg:hidden">
               <Button
                 variant="ghost"
                 className="bg-btn-gradient p-2 rounded text-white"

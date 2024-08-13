@@ -1,4 +1,5 @@
 "use client";
+import { logoutUser } from "@/app/services/actions/logoutUser";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -11,7 +12,7 @@ import {
   Settings,
   Users,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import Logo from "../shared/Logo";
 import SidebarMenu from "./SidebarMenu";
@@ -27,10 +28,10 @@ const menuItems = [
 const operateItems = [
   { icon: Settings, label: "Settings", href: "/dashboard/setting" },
   { icon: HomeIcon, label: "Home", href: "/" },
-  { icon: LogOut, label: "Logout", href: "/logout" },
 ];
 
 export default function Sidebar() {
+  const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -43,16 +44,26 @@ export default function Sidebar() {
           <Logo />
         </div>
         <nav className="my-8 flex flex-col justify-between h-full">
+          {/* Menu Items */}
           <div>
             {menuItems.map((item, index) => (
               <SidebarMenu key={index} item={item} pathname={pathname} />
             ))}
           </div>
-
+          {/* Operate Items */}
           <div>
             {operateItems.map((item, index) => (
               <SidebarMenu key={index} item={item} pathname={pathname} />
             ))}
+            {/* Logout button */}
+            <Button
+              onClick={() => logoutUser(router)}
+              variant="ghost"
+              className="w-full justify-start gap-2 p-2 text-gray-600 hover:text-red-500 hover:bg-green-50 text-lg"
+            >
+              <LogOut className="h-5 w-5" />
+              Logout
+            </Button>
           </div>
         </nav>
       </div>
