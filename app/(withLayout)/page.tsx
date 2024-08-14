@@ -13,7 +13,7 @@ export default function Home() {
       <HeroSection />
       <AboutArea />
       <FeaturesArea />
-      <Causes />
+      <Causes sorting={false} pagination={false} showMoreBtn={true} />
       <Cta />
       <Events />
       <Volunteer />

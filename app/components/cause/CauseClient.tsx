@@ -2,13 +2,25 @@
 import { useDebounce } from "@/app/redux/hooks";
 import getCause from "@/app/services/actions/getCause";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PaginationControls from "../shared/PaginationControls";
 import SortControls from "../shared/SortControls";
 import { Spinner } from "../shared/Spinner";
 import CauseCard from "./CauseCard";
 
-const CauseClient = () => {
+interface ICausesProps {
+  sorting?: boolean;
+  pagination?: boolean;
+  showMoreBtn?: boolean;
+}
+const CauseClient = ({
+  sorting = true,
+  pagination = true,
+  showMoreBtn = false,
+}: ICausesProps) => {
+  const router = useRouter();
+
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(6);
@@ -70,23 +82,27 @@ const CauseClient = () => {
       {cause?.data?.length > 0 ? (
         <div>
           {/* Search and sort */}
-          <div className="my-4 flex flex-col sm:flex-row gap-y-2 sm:gap-x-5 justify-between ">
-            <Input
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search causes..."
-              className="outline-none  "
-            />
+          {sorting && (
+            <div className="my-4 flex flex-col sm:flex-row gap-y-2 sm:gap-x-5 justify-between ">
+              <Input
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search causes..."
+                className="outline-none  "
+              />
 
-            <SortControls
-              sortBy={sortBy}
-              setSortBy={(newSortBy) => handleSortChange(newSortBy, sortOrder)}
-              sortOrder={sortOrder}
-              setSortOrder={(newSortOrder) =>
-                handleSortChange(sortBy, newSortOrder)
-              }
-              sortOptions={sortOptions}
-            />
-          </div>
+              <SortControls
+                sortBy={sortBy}
+                setSortBy={(newSortBy) =>
+                  handleSortChange(newSortBy, sortOrder)
+                }
+                sortOrder={sortOrder}
+                setSortOrder={(newSortOrder) =>
+                  handleSortChange(sortBy, newSortOrder)
+                }
+                sortOptions={sortOptions}
+              />
+            </div>
+          )}
           {/* Causes Items */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 ">
             {/* Cause Card */}
@@ -103,12 +119,22 @@ const CauseClient = () => {
             ))}
           </div>{" "}
           {/* Pagination */}
-          {cause?.meta && cause?.meta?.total > limit && (
+          {pagination && cause?.meta && cause?.meta?.total > limit && (
             <PaginationControls
               currentPage={page}
               totalPages={Math.ceil(cause?.meta?.total / limit)}
               onPageChange={setPage}
             />
+          )}
+          {showMoreBtn && (
+            <div className="w-full flex justify-center">
+              <button
+                onClick={() => router.push("/cause")}
+                className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 transition duration-300 ease-in-out mt-10"
+              >
+                Show More
+              </button>
+            </div>
           )}
         </div>
       ) : (

@@ -4,8 +4,12 @@ import Heading from "../shared/Heading";
 import { Spinner } from "../shared/Spinner";
 
 const LazyClientCause = lazy(() => import("./CauseClient"));
-
-const Causes = () => {
+interface ICausesProps {
+  sorting?: boolean;
+  pagination?: boolean;
+  showMoreBtn?: boolean;
+}
+const Causes = ({ sorting, pagination, showMoreBtn }: ICausesProps) => {
   return (
     <div className="py-10">
       <Container>
@@ -21,7 +25,11 @@ const Causes = () => {
         </div>
 
         <Suspense fallback={<Spinner className="mx-auto h-8 w-8 mt-10" />}>
-          <LazyClientCause />
+          <LazyClientCause
+            sorting={sorting}
+            pagination={pagination}
+            showMoreBtn={showMoreBtn}
+          />
         </Suspense>
       </Container>
     </div>
