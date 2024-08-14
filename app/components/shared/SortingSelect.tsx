@@ -21,7 +21,7 @@ const SortingSelect = ({
 }: SortingSelectProps) => {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger className="w-[180px] outline-none bg-white z-50 focus:outline-none focus-within:outline-none focus-visible:outline-none">
+      <SelectTrigger className="w-[180px] outline-none bg-white z-40 focus:outline-none focus-within:outline-none focus-visible:outline-none">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent className="outline-none bg-white z-50">
