@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import TextTruncate from "react-text-truncate";
 import ProgressBar from "./ProgressBar";
 
 type CauseCardProps = {
@@ -48,10 +49,10 @@ const CauseCard = ({ image, title, desc, goal, raise }: CauseCardProps) => {
 
       <div className="flex flex-col justify-center items-center mt-5 px-5">
         <h2 className="text-xl lg:text-3xl font-semibold text-gray-800 text-center hover:text-green-500 transition duration-300 ease-in-out cursor-pointer">
-          {title}
+          <TextTruncate line={3} element="span" truncateText="…" text={title} />
         </h2>
         <p className=" text-sm text-center font-inter text-gray-500 mt-3">
-          {desc}
+          <TextTruncate line={4} element="span" truncateText="…" text={desc} />
         </p>
       </div>
     </div>
