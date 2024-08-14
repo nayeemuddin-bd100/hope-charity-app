@@ -1,0 +1,121 @@
+"use client";
+import { useDebounce } from "@/app/redux/hooks";
+import getCause from "@/app/services/actions/getCause";
+import { Input } from "@/components/ui/input";
+import { useEffect, useState } from "react";
+import PaginationControls from "../shared/PaginationControls";
+import SortControls from "../shared/SortControls";
+import { Spinner } from "../shared/Spinner";
+import CauseCard from "./CauseCard";
+
+const CauseClient = () => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(6);
+  const [sortBy, setSortBy] = useState<string>("createdAt");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+
+  const [cause, setCause] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  // set debounce term
+  const debounceTerm = useDebounce({
+    searchQuery: searchTerm,
+    delay: 600,
+  });
+
+  useEffect(() => {
+    const fetchCauses = async () => {
+      setIsLoading(true);
+      try {
+        const causeData = await getCause({
+          searchTerm: debounceTerm,
+          page,
+          limit,
+          sortBy,
+          sortOrder,
+        });
+        setCause(causeData);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCauses();
+  }, [page, limit, sortBy, sortOrder, debounceTerm]);
+
+  const sortOptions = [
+    { value: "title", label: "Title" },
+    { value: "goalAmount", label: "Goal Amount" },
+    { value: "raisedAmount", label: "Raised Amount" },
+    { value: "createdAt", label: "Created At" },
+  ];
+
+  const handleSortChange = (
+    newSortBy: string,
+    newSortOrder: "asc" | "desc"
+  ) => {
+    setSortBy(newSortBy);
+    setSortOrder(newSortOrder);
+    setPage(1); // Reset to first page when sort changes
+  };
+
+  if (isLoading) {
+    return <Spinner className="mx-auto h-20 w-20 mt-10" />;
+  }
+  return (
+    <>
+      {cause?.data?.length > 0 ? (
+        <div>
+          {/* Search and sort */}
+          <div className="my-4 flex flex-col sm:flex-row gap-y-2 sm:gap-x-5 justify-between ">
+            <Input
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search causes..."
+              className="outline-none  "
+            />
+
+            <SortControls
+              sortBy={sortBy}
+              setSortBy={(newSortBy) => handleSortChange(newSortBy, sortOrder)}
+              sortOrder={sortOrder}
+              setSortOrder={(newSortOrder) =>
+                handleSortChange(sortBy, newSortOrder)
+              }
+              sortOptions={sortOptions}
+            />
+          </div>
+          {/* Causes Items */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 ">
+            {/* Cause Card */}
+
+            {cause?.data?.map((cause: any) => (
+              <CauseCard
+                key={cause?.id}
+                image={cause?.image}
+                title={cause?.title}
+                desc={cause?.description}
+                goal={cause?.goalAmount}
+                raise={cause?.raisedAmount}
+              />
+            ))}
+          </div>{" "}
+          {/* Pagination */}
+          {cause?.meta && cause?.meta?.total > limit && (
+            <PaginationControls
+              currentPage={page}
+              totalPages={Math.ceil(cause?.meta?.total / limit)}
+              onPageChange={setPage}
+            />
+          )}
+        </div>
+      ) : (
+        <div className="my-10 text-lg text-center">No Causes Found</div>
+      )}
+    </>
+  );
+};
+
+export default CauseClient;
