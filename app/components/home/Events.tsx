@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import Container from "../shared/Container";
 import Heading from "../shared/Heading";
 import EventCard from "./EventCard";
@@ -28,7 +29,7 @@ const Events = () => {
               <EventCard
                 img="/images/events/event-1.jpg"
                 title="Fundraising event that could change some poor children."
-                desc="lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
+                desc="Join us for a powerful fundraising event dedicated to transforming the lives of impoverished children. Together, we can make a lasting impact, providing essential resources and opportunities to those who need it most. Your support could be the change they've been waiting for."
               />
             </div>
 
@@ -36,14 +37,14 @@ const Events = () => {
               <EventCard
                 img="/images/events/event-2.jpg"
                 title="Many Children are suffering a lot for food."
-                desc="lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
+                desc="Countless children are enduring severe hunger every day, struggling to find their next meal. This urgent situation calls for immediate action to provide the nourishment they desperately need. Together, we can help alleviate their suffering and bring hope to their lives."
               />
             </div>
             <div data-aos="fade-up" data-aos-duration="1000">
               <EventCard
                 img="/images/events/event-3.jpg"
                 title="Be kind for the poor people and the kids."
-                desc="lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. "
+                desc="Extend kindness to those in need, especially the poor and vulnerable children. Your compassion can make a world of difference, offering them hope and a brighter future. Let's come together to show that even small acts of kindness can have a big impact."
               />
             </div>
           </div>
@@ -68,6 +69,15 @@ const Events = () => {
               height={258}
               className="object-cover w-full h-full  -z-10 "
             />
+          </div>
+
+          <div className="w-full flex justify-center">
+            <Link
+              href={"/event"}
+              className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 transition duration-300 ease-in-out mt-10"
+            >
+              Show More
+            </Link>
           </div>
         </div>
       </Container>
