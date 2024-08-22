@@ -9,16 +9,19 @@ import SortControls from "../shared/SortControls";
 import { Spinner } from "../shared/Spinner";
 import CauseCard from "./CauseCard";
 
-interface ICausesProps {
+interface ICauseClientProps {
+  initialCauses: any;
   sorting?: boolean;
   pagination?: boolean;
   showMoreBtn?: boolean;
 }
+
 const CauseClient = ({
+  initialCauses,
   sorting = true,
   pagination = true,
   showMoreBtn = false,
-}: ICausesProps) => {
+}: ICauseClientProps) => {
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -27,8 +30,8 @@ const CauseClient = ({
   const [sortBy, setSortBy] = useState<string>("createdAt");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
-  const [cause, setCause] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [causes, setCauses] = useState<any>(initialCauses);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // set debounce term
   const debounceTerm = useDebounce({
@@ -36,6 +39,7 @@ const CauseClient = ({
     delay: 600,
   });
 
+  // fetch causes action
   useEffect(() => {
     const fetchCauses = async () => {
       setIsLoading(true);
@@ -47,7 +51,7 @@ const CauseClient = ({
           sortBy,
           sortOrder,
         });
-        setCause(causeData);
+        setCauses(causeData);
       } catch (error) {
         console.error(error);
       } finally {
@@ -58,6 +62,7 @@ const CauseClient = ({
     fetchCauses();
   }, [page, limit, sortBy, sortOrder, debounceTerm]);
 
+  // sorting options
   const sortOptions = [
     { value: "title", label: "Title" },
     { value: "goalAmount", label: "Goal Amount" },
@@ -65,6 +70,7 @@ const CauseClient = ({
     { value: "createdAt", label: "Created At" },
   ];
 
+  // sort change action
   const handleSortChange = (
     newSortBy: string,
     newSortOrder: "asc" | "desc"
@@ -74,73 +80,69 @@ const CauseClient = ({
     setPage(1); // Reset to first page when sort changes
   };
 
-  if (isLoading) {
-    return <Spinner className="mx-auto h-20 w-20 mt-10" />;
-  }
   return (
-    <>
-      {cause?.data?.length > 0 ? (
-        <div>
-          {/* Search and sort */}
-          {sorting && (
-            <div className="my-4 flex flex-col sm:flex-row gap-y-2 sm:gap-x-5 justify-between ">
-              <Input
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search causes..."
-                className="outline-none  "
-              />
+    <div>
+      {/* Search and sort */}
+      {sorting && (
+        <div className="my-4 flex flex-col sm:flex-row gap-y-2 sm:gap-x-5 justify-between ">
+          <Input
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search causes..."
+            className="outline-none"
+          />
+          <SortControls
+            sortBy={sortBy}
+            setSortBy={(newSortBy) => handleSortChange(newSortBy, sortOrder)}
+            sortOrder={sortOrder}
+            setSortOrder={(newSortOrder) =>
+              handleSortChange(sortBy, newSortOrder)
+            }
+            sortOptions={sortOptions}
+          />
+        </div>
+      )}
 
-              <SortControls
-                sortBy={sortBy}
-                setSortBy={(newSortBy) =>
-                  handleSortChange(newSortBy, sortOrder)
-                }
-                sortOrder={sortOrder}
-                setSortOrder={(newSortOrder) =>
-                  handleSortChange(sortBy, newSortOrder)
-                }
-                sortOptions={sortOptions}
-              />
-            </div>
-          )}
-          {/* Causes Items */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 ">
-            {/* Cause Card */}
-
-            {cause?.data?.map((cause: any) => (
-              <CauseCard
-                key={cause?.id}
-                image={cause?.image}
-                title={cause?.title}
-                desc={cause?.description}
-                goal={cause?.goalAmount}
-                raise={cause?.raisedAmount}
-              />
-            ))}
-          </div>{" "}
-          {/* Pagination */}
-          {pagination && cause?.meta && cause?.meta?.total > limit && (
-            <PaginationControls
-              currentPage={page}
-              totalPages={Math.ceil(cause?.meta?.total / limit)}
-              onPageChange={setPage}
+      {/* Causes Items */}
+      {isLoading ? (
+        <Spinner className="mx-auto h-20 w-20 mt-10" />
+      ) : causes?.data?.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 ">
+          {causes.data.map((cause: any) => (
+            <CauseCard
+              key={cause?.id}
+              image={cause?.image}
+              title={cause?.title}
+              desc={cause?.description}
+              goal={cause?.goalAmount}
+              raise={cause?.raisedAmount}
             />
-          )}
-          {showMoreBtn && (
-            <div className="w-full flex justify-center">
-              <button
-                onClick={() => router.push("/cause")}
-                className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 transition duration-300 ease-in-out mt-10"
-              >
-                Show More
-              </button>
-            </div>
-          )}
+          ))}
         </div>
       ) : (
-        <div className="my-10 text-lg text-center">No Causes Found</div>
+        <div className="my-10 text-2xl text-center">No Causes Found</div>
       )}
-    </>
+
+      {/* Pagination */}
+      {pagination && causes?.meta && causes?.meta?.total > limit && (
+        <PaginationControls
+          currentPage={page}
+          totalPages={Math.ceil(causes?.meta?.total / limit)}
+          onPageChange={setPage}
+        />
+      )}
+
+      {showMoreBtn && (
+        <div className="w-full flex justify-center">
+          <button
+            onClick={() => router.push("/cause")}
+            className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 transition duration-300 ease-in-out mt-10"
+          >
+            Show More
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
 
