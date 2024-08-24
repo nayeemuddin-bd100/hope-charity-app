@@ -110,7 +110,8 @@ const CauseClient = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5 ">
           {causes.data.map((cause: any) => (
             <CauseCard
-              key={cause?.id}
+              key={cause?._id}
+              causeId={cause?._id}
               image={cause?.image}
               title={cause?.title}
               desc={cause?.description}
