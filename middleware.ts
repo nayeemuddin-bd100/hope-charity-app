@@ -7,7 +7,7 @@ import { authKey } from "./constant/authKey";
 import { USER_ROLES } from "./constant/role";
 
 const authRoute = ["/login", "/register"];
-const privateRoute = ["/change-password", "/profile"];
+const privateRoute = ["/change-password", "/profile", "/donate"];
 const roleBasedRoute = {
   ADMIN: ["/dashboard"],
   SUPER_ADMIN: ["/dashboard"],
@@ -61,5 +61,6 @@ export const config = {
     "/dashboard/:page*",
     "/change-password",
     "/profile",
+    "/donate",
   ],
 };
