@@ -1,16 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
-import TextTruncate from "react-text-truncate";
+import TruncatedText from "../shared/TruncatedText";
 import ProgressBar from "./ProgressBar";
 
 type CauseCardProps = {
+  causeId: string;
   image: string;
   title: string;
   desc: string;
   goal: number;
   raise: number;
 };
-const CauseCard = ({ image, title, desc, goal, raise }: CauseCardProps) => {
+const CauseCard = ({
+  causeId,
+  image,
+  title,
+  desc,
+  goal,
+  raise,
+}: CauseCardProps) => {
   const percentage = (raise / goal) * 100;
   return (
     <div className="flex flex-col justify-center items-center group border border-x-green-500 border-y-yellow-500 py-4">
@@ -28,7 +36,7 @@ const CauseCard = ({ image, title, desc, goal, raise }: CauseCardProps) => {
         />
         <div className="absolute inset-0 bg-primary bg-opacity-0 group-hover:bg-opacity-70 transition duration-300 ease-in-out rounded-full flex justify-center items-center">
           <Link
-            href="/donate"
+            href={`/donate/${causeId}`}
             className="bg-btn-gradient text-white px-3 py-2 rounded hover:bg-btn-gradient-hover transition duration-300 ease-in-out opacity-0 group-hover:opacity-100"
           >
             Donate Now
@@ -48,11 +56,11 @@ const CauseCard = ({ image, title, desc, goal, raise }: CauseCardProps) => {
       </div>
 
       <div className="flex flex-col justify-center items-center mt-5 px-5">
-        <h2 className="text-xl lg:text-3xl font-semibold text-gray-800 text-center hover:text-green-500 transition duration-300 ease-in-out cursor-pointer">
-          <TextTruncate line={3} element="span" truncateText="…" text={title} />
+        <h2 className="text-xl lg:text-3xl font-semibold text-gray-800 text-center ">
+          <TruncatedText text={title} lines={3} />
         </h2>
         <p className=" text-sm text-center font-inter text-gray-500 mt-3">
-          <TextTruncate line={4} element="span" truncateText="…" text={desc} />
+          <TruncatedText text={desc} lines={4} />
         </p>
       </div>
     </div>
