@@ -44,6 +44,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // allow login user to dynamic donation route
+  if (accessToken && pathname.startsWith("/donate")) {
+    return NextResponse.next();
+  }
+
   // Allow admin and super admin access to all dashboard routes
   if (role === USER_ROLES.ADMIN || role === USER_ROLES.SUPER_ADMIN) {
     if (pathname.startsWith("/dashboard")) {
@@ -61,6 +66,6 @@ export const config = {
     "/dashboard/:page*",
     "/change-password",
     "/profile",
-    "/donate",
+    "/donate/:id*",
   ],
 };
