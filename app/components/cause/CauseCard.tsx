@@ -1,5 +1,8 @@
+"use client";
+import { getUserInfoFromToken } from "@/app/services/auth.service";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import TruncatedText from "../shared/TruncatedText";
 import ProgressBar from "./ProgressBar";
 
@@ -19,28 +22,38 @@ const CauseCard = ({
   goal,
   raise,
 }: CauseCardProps) => {
+  const router = useRouter();
   const percentage = (raise / goal) * 100;
+
+  const userInfo = getUserInfoFromToken();
+  console.log("🚀 ~ userInfo:", userInfo);
+  const handleDonate = () => {
+    if (userInfo && userInfo?.role !== "donor") {
+      return toast.error(`You are ${userInfo?.role}, Only donors can donate`);
+    }
+    router.push(`/donate/${causeId}`);
+  };
   return (
-    <div className="flex flex-col justify-center items-center group border border-x-green-500 border-y-yellow-500 py-4">
+    <div className="flex flex-col justify-center items-center group border border-x-green-500 border-y-yellow-500 py-4 px-4 md:px-2 lg:px-5">
       <div
         data-aos="zoom-in"
         data-aos-duration="1000"
-        className="relative w-[200px] h-[200px]  md:w-[300px] md:h-[300px] overflow-hidden  rounded-full border-2 border-green-200 transition duration-300 ease-in-out "
+        className="relative w-full max-w-[300px] aspect-square overflow-hidden rounded-full border-2 border-green-200 transition duration-300 ease-in-out "
       >
         <Image
           src={image}
           alt={image}
-          width={300}
-          height={300}
-          className="object-cover w-full h-full rounded-full group-hover:scale-105 transition duration-300 ease-in-out"
+          layout="fill"
+          objectFit="cover"
+          className="rounded-full group-hover:scale-105 transition duration-300 ease-in-out"
         />
         <div className="absolute inset-0 bg-primary bg-opacity-0 group-hover:bg-opacity-70 transition duration-300 ease-in-out rounded-full flex justify-center items-center">
-          <Link
-            href={`/donate/${causeId}`}
+          <button
+            onClick={handleDonate}
             className="bg-btn-gradient text-white px-3 py-2 rounded hover:bg-btn-gradient-hover transition duration-300 ease-in-out opacity-0 group-hover:opacity-100"
           >
             Donate Now
-          </Link>
+          </button>
         </div>
       </div>
 

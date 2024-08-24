@@ -2,9 +2,12 @@ import ProgressBar from "@/app/components/cause/ProgressBar";
 import DonationForm from "@/app/components/donate/DonationForm";
 import Breadcrumb from "@/app/components/shared/Breadcrumb";
 import Container from "@/app/components/shared/Container";
+import { Spinner } from "@/app/components/shared/Spinner";
 import TruncatedText from "@/app/components/shared/TruncatedText";
 import NotFound from "@/app/not-found";
 import getCauseById from "@/app/services/actions/getCauseById";
+import getProfile from "@/app/services/actions/getProfile";
+import { Suspense } from "react";
 
 interface IParams {
   params: {
@@ -13,11 +16,15 @@ interface IParams {
 }
 const Donate = async ({ params }: IParams) => {
   const { causeId } = params;
+
   const cause = await getCauseById({
     causeId,
   });
 
-  const { raisedAmount, goalAmount, title, description } = cause?.data;
+  const user = await getProfile();
+
+  const { raisedAmount, goalAmount, title, description, createdBy } =
+    cause?.data;
 
   const percentage = (raisedAmount / goalAmount) * 100;
 
@@ -55,8 +62,11 @@ const Donate = async ({ params }: IParams) => {
               </p>
 
               {/* Donation form  */}
-
-              <DonationForm />
+              <Suspense
+                fallback={<Spinner className="mx-auto h-8 w-8 mt-10" />}
+              >
+                <DonationForm donor={user?.data} causeId={causeId} />
+              </Suspense>
             </div>
           </div>
         </Container>
