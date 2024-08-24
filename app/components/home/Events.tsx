@@ -4,7 +4,7 @@ import Container from "../shared/Container";
 import Heading from "../shared/Heading";
 import EventCard from "./EventCard";
 
-const Events = () => {
+const Events = ({ showMoreBtn = true }) => {
   return (
     <div className="py-10 md:py-24">
       <Container>
@@ -71,14 +71,16 @@ const Events = () => {
             />
           </div>
 
-          <div className="w-full flex justify-center">
-            <Link
-              href={"/event"}
-              className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 transition duration-300 ease-in-out mt-10"
-            >
-              Show More
-            </Link>
-          </div>
+          {showMoreBtn && (
+            <div className="w-full flex justify-center">
+              <Link
+                href={"/event"}
+                className="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 transition duration-300 ease-in-out mt-10"
+              >
+                Show More
+              </Link>
+            </div>
+          )}
         </div>
       </Container>
     </div>

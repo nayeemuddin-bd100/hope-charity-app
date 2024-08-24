@@ -5,7 +5,7 @@ const Event = () => {
   return (
     <div>
       <Breadcrumb label="Our Events" />
-      <Events />
+      <Events showMoreBtn={false} />
     </div>
   );
 };
