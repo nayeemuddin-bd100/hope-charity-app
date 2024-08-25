@@ -1,13 +1,18 @@
 "use client";
 
 import FormWrapper from "@/app/components/Form/FormWrapper";
+import submitDonation from "@/app/services/actions/submitDonation";
 import { IDonor } from "@/app/types/donor";
 import { donationFormSchema } from "@/app/validationSchema/donationZodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FieldValues, SubmitHandler } from "react-hook-form";
+import toast from "react-hot-toast";
+import DonationAmountInput from "../Form/DonationFormInput";
 import FormInput from "../Form/FormInput";
 import FormTextArea from "../Form/FormTextArea";
+import { Spinner } from "../shared/Spinner";
 
 interface IParams {
   donor: IDonor;
@@ -15,67 +20,52 @@ interface IParams {
 }
 
 const DonationForm = ({ donor, causeId }: IParams) => {
-  const [customAmount, setCustomAmount] = useState<number | null>(null);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
-  console.log(causeId);
+  const handleSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const donationData = {
+      amount: Number(data?.donationAmount),
+      cause: causeId,
+    };
+    try {
+      setLoading(true);
+      const res = await submitDonation({ ...donationData });
 
-  const handleSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
-    // Handle form submission
-  };
+      if (!res.success) {
+        toast.error(res?.errorMessages[0].message || res?.message);
+      }
 
-  const handleDonationAmount = (amount: number | null) => {
-    setCustomAmount(amount);
+      if (res.success) {
+        toast.success(res.message);
+      }
+
+      router.push(`/donate/success?amount=${donationData.amount}`);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div>
       <FormWrapper
         onSubmit={handleSubmit}
         resolver={zodResolver(donationFormSchema)}
-        defaultValues={
-          {
-            // firstName: donor.name?.firstName || "",
-            // lastName: donor.name?.lastName || "",
-            // email: donor?.email || "",
-            // address: donor?.address || "",
-            // message: "",
-            // donationAmount: null,
-          }
-        }
+        defaultValues={{
+          firstName: donor.name?.firstName || "",
+          lastName: donor.name?.lastName || "",
+          email: donor?.email || "",
+          address: donor?.address || "",
+          message: "",
+          donationAmount: Number(0),
+        }}
       >
-        {/* Donation Amount */}
-        <div className="mb-6">
-          <p className="text-lg font-semibold text-gray-700 mb-5">
-            Select Donation Amount
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[10, 20, 50].map((amount) => (
-              <button
-                key={amount}
-                type="button"
-                className={`py-2 px-4 rounded-md ${
-                  customAmount === amount
-                    ? "bg-green-500 text-white"
-                    : "bg-gray-200 text-gray-700"
-                }`}
-                onClick={() => handleDonationAmount(amount)}
-              >
-                ${amount}
-              </button>
-            ))}
-            <input
-              type="number"
-              placeholder="Custom Amount"
-              className="border rounded-md py-2 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-              value={customAmount !== null ? customAmount : ""}
-              onChange={(e) =>
-                handleDonationAmount(
-                  e.target.value ? parseInt(e.target.value) : null
-                )
-              }
-            />
-          </div>
-        </div>
+        <DonationAmountInput
+          name="donationAmount"
+          label="Select Donation Amount"
+          predefinedAmounts={[10, 20, 50]}
+        />
 
         <h2 className="text-lg font-semibold text-gray-700 mb-5">
           Enter Your Details
@@ -121,7 +111,7 @@ const DonationForm = ({ donor, causeId }: IParams) => {
             type="submit"
             className="bg-btn-gradient hover:bg-btn-gradient-hover text-white font-bold py-2 px-8 rounded-xl focus:outline-none focus:shadow-outline"
           >
-            Submit
+            {loading ? <Spinner className="w-4 h-4 mx-auto" /> : "Submit"}
           </button>
         </div>
       </FormWrapper>
