@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { FaHistory, FaUser } from "react-icons/fa";
 import Logo from "../shared/Logo";
 import SidebarMenu from "./SidebarMenu";
 
@@ -23,6 +24,20 @@ const menuItems = [
   // { icon: Calendar, label: "Manage Events", href: "/dashboard/event" },
   { icon: Users, label: "Manage Users", href: "/dashboard/user" },
   { icon: DollarSign, label: "Manage Donations", href: "/dashboard/donation" },
+];
+
+const userMenuItems = [
+  { icon: Home, label: "Dashboard", href: "/dashboard" },
+  {
+    icon: FaUser,
+    label: "Personal Information",
+    href: "/dashboard/personal-information",
+  },
+  {
+    icon: FaHistory,
+    label: "Donation History",
+    href: "/dashboard/donation-history",
+  },
 ];
 
 const operateItems = [
