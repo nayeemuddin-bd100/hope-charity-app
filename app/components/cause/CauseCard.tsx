@@ -26,7 +26,6 @@ const CauseCard = ({
   const percentage = (raise / goal) * 100;
 
   const userInfo = getUserInfoFromToken();
-  console.log("🚀 ~ userInfo:", userInfo);
   const handleDonate = () => {
     if (userInfo && userInfo?.role !== "donor") {
       return toast.error(`You are ${userInfo?.role}, Only donors can donate`);

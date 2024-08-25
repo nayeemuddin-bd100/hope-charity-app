@@ -7,7 +7,10 @@ const getCauseById = async (params: GetCauseByIdParams) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_API_URL}/cause/${
       params.causeId
-    }?fields=${params.fields || ""}`
+    }?fields=${params.fields || ""}`,
+    {
+      cache: "no-store",
+    }
   );
 
   const result = await response.json();
