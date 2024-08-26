@@ -45,10 +45,17 @@ const operateItems = [
   { icon: HomeIcon, label: "Home", href: "/" },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ userInfo }: any) {
   const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+
+  let sidebarMenu = null;
+  if (userInfo?.role === "admin" || userInfo?.role === "super-admin") {
+    sidebarMenu = menuItems;
+  } else {
+    sidebarMenu = userMenuItems;
+  }
 
   return (
     <div className="md:min-h-screen">
@@ -61,7 +68,7 @@ export default function Sidebar() {
         <nav className="my-8 flex flex-col justify-between h-full">
           {/* Menu Items */}
           <div>
-            {menuItems.map((item, index) => (
+            {sidebarMenu.map((item, index) => (
               <SidebarMenu key={index} item={item} pathname={pathname} />
             ))}
           </div>
