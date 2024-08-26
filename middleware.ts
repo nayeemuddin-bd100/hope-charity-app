@@ -4,7 +4,6 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { CustomJwtPayload } from "./app/types";
 import { authKey } from "./constant/authKey";
-import { USER_ROLES } from "./constant/role";
 
 const authRoute = ["/login", "/register"];
 const privateRoute = ["/change-password", "/profile", "/donate"];
@@ -50,7 +49,13 @@ export function middleware(request: NextRequest) {
   }
 
   // Allow admin and super admin access to all dashboard routes
-  if (role === USER_ROLES.ADMIN || role === USER_ROLES.SUPER_ADMIN) {
+  // if (role === USER_ROLES.ADMIN || role === USER_ROLES.SUPER_ADMIN) {
+  //   if (pathname.startsWith("/dashboard")) {
+  //     return NextResponse.next();
+  //   }
+  // }
+
+  if (role) {
     if (pathname.startsWith("/dashboard")) {
       return NextResponse.next();
     }
