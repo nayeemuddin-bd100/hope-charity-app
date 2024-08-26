@@ -24,12 +24,12 @@ export default function DashboardLayout({
         <Container>
           <div className="flex flex-col md:flex-row h-screen bg-gray-100 w-full  m-0 p-0 overflow-x-hidden">
             <div>
-              <Sidebar />
+              <Sidebar userInfo={userInfo} />
             </div>
 
             {/* Main Content */}
             <div className="flex-1 overflow-y-auto">
-              <main className="p-6">{children}</main>
+              <main className="py-6">{children}</main>
             </div>
           </div>
         </Container>
