@@ -13,6 +13,8 @@ const getProfile = async () => {
         "Content-Type": "application/json",
       },
       credentials: "include",
+      // next: { revalidate: 5 },
+      cache: "no-store",
     }
   );
 
