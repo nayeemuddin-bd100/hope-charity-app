@@ -121,7 +121,7 @@ const Register = () => {
               <label className="block text-gray-700 text-lg mb-2">
                 Register as
               </label>
-              <div className="flex space-x-4">
+              <div className="flex flex-col-reverse gap-y-9 lg:gap-x-9  md:flex-row md:gap-x-4">
                 <button
                   type="button"
                   className={`flex-1 py-2 px-4 rounded ${
@@ -133,7 +133,7 @@ const Register = () => {
                 >
                   Donor
                 </button>
-                <button
+                {/* <button
                   type="button"
                   className={`flex-1 py-2 px-4 rounded ${
                     userType === "volunteer"
@@ -143,13 +143,26 @@ const Register = () => {
                   onClick={() => setUserType("volunteer")}
                 >
                   Volunteer
-                </button>
+                </button> */}
+
+                <div className="flex-1 relative">
+                  <button
+                    type="button"
+                    className={`w-full py-2 px-4 rounded bg-gray-300 text-gray-500`}
+                    disabled={true}
+                  >
+                    Volunteer
+                  </button>
+                  <p className="absolute text-xs text-gray-700 mt-1 left-0 right-0 text-start">
+                    Signup Closed: Volunteer Team Complete
+                  </p>
+                </div>
               </div>
             </div>
             <button
               type="submit"
               disabled={isLoading}
-              className="bg-green-500 hover:bg-green-700 w-full text-white font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline"
+              className="bg-green-500 hover:bg-green-700 w-full text-white font-bold py-2 px-8 mt-3 md:mt-8 lg:mt-3 rounded focus:outline-none focus:shadow-outline"
             >
               {isLoading
                 ? "Loading..."

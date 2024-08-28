@@ -133,7 +133,7 @@ const CauseClient = ({
         />
       )}
 
-      {showMoreBtn && (
+      {causes?.data?.length > 0 && showMoreBtn && (
         <div className="w-full flex justify-center">
           <button
             onClick={() => router.push("/cause")}
